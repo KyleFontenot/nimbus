@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "lib": [
+      "esnext"
+    ],
+    "noEmitOnError": true,
+    "esModuleInterop": true,
+    "declaration": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.test.js",
+    "src/**/*.test.ts"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}
