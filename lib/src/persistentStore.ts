@@ -1,10 +1,6 @@
-/* 
-
-*/
 
 import { writable as svelteWritable } from "svelte/store"
 import type { Writable, StartStopNotifier } from "svelte/store"
-
 
 type StorageType = "cookie" | "local" | "session"
 const sharedStorage: { [type in StorageType]?: StorageInterface<any> } = {}
@@ -104,32 +100,20 @@ import type { CookieOptions } from "browser-cookies"
 import { get, set, createStore, del } from "idb-keyval"
 import type { Writable } from "svelte/store"
 
-/**
- * Disabled warnings about missing/unavailable storages
- */
+
 export function disableWarnings(): void {
   noWarnings = true
 }
 
-/**
- * If set to true, no warning will be emitted if the requested Storage is not found.
- * This option can be useful when the lib is used on a server.
- */
 let noWarnings = false
 
-/**
- * List of storages where the warning have already been displayed.
- */
 const alreadyWarnFor: Array<string> = []
 
 const warnUser = (message: string) => {
   const isProduction = typeof process !== "undefined" && process.env?.NODE_ENV === "production"
 
   if (!noWarnings && !alreadyWarnFor.includes(message) && !isProduction) {
-    // if (typeof window === "undefined") {
-    //   message += "\n" + "Are you running on a server? Most of storages are not available while running on a server."
-    // }
-    // console.warn(message)
+
     alreadyWarnFor.push(message)
   }
 }

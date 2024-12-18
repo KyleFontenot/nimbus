@@ -1,6 +1,6 @@
 import { writable, onDestroy } from 'svelte/store';
 
-export default function persiststore(initial: unknown) {
+export default function fiveify(initial: unknown) {
   let value = initial;
   const internal = writable(initial);
   const unsubscribe = internal.subscribe((val) => {
