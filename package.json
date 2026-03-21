@@ -30,7 +30,7 @@
 			"svelte": "./src/clumps/*.svelte",
 			"default": "./dist/clumps/*.js"
 		},
-		"./styles/*": "./dist/styles/*",
+		"./styles/*": "./src/style/*",
 		"./utils/*": {
 			"types": "./dist/utils/*.d.ts",
 			"default": "./dist/utils/*.js"

@@ -1,0 +1,282 @@
+/**
+ * Nimbus Global Styles
+ *
+ * Usage in SvelteKit +layout.svelte:
+ *   import 'nimbus/styles/nimbus.css';
+ *
+ * Provides:
+ *   - CSS reset & normalize
+ *   - OpenProps-compatible custom properties (colors, spacing, radii, shadows, fonts)
+ *   - Dark mode via prefers-color-scheme
+ *   - Focus ring and invalid-input styles
+ *   - Base typography
+ */
+
+@import "./reset.css";
+@import "./normalize.css";
+
+/* ═══════════════════════════════════
+   Design Tokens
+   ═══════════════════════════════════ */
+
+:root {
+  /* ── Colors (HSL base) ── */
+  --accent-h: 208;
+  --accent-s: 100%;
+  --accent-l: 42.9%;
+  --accent: hsl(var(--accent-h), var(--accent-s), var(--accent-l));
+
+  --light: #fefefe;
+  --dark: #222222;
+  --fore: var(--dark, currentColor);
+  --back: var(--light);
+
+  --error-h: 0;
+  --error-s: 94.5%;
+  --error-l: 43.1%;
+  --error: hsl(var(--error-h), var(--error-s), var(--error-l));
+
+  /* ── Gray Scale ── */
+  --gray-0: #fefefe;
+  --gray-50: #f9f9f9;
+  --gray-100: hsl(0, 0%, 90%);
+  --gray-200: hsl(0, 0%, 80%);
+  --gray-300: hsl(0, 0%, 70%);
+  --gray-400: hsl(0, 0%, 60%);
+  --gray-500: hsl(0, 0%, 50%);
+  --gray-600: hsl(0, 0%, 40%);
+  --gray-700: hsl(0, 0%, 30%);
+  --gray-800: hsl(0, 0%, 20%);
+  --gray-900: hsl(0, 0%, 10%);
+
+  /* ── Semantic Surfaces ── */
+  --surface-1: var(--light);
+  --surface-2: var(--gray-50);
+  --surface-3: var(--gray-100);
+  --text-1: var(--fore);
+  --text-2: var(--gray-600);
+  --link: var(--accent);
+
+  /* ── Spacing (fluid clamp scale) ── */
+  --size-0: 0;
+  --size-1: clamp(0.25rem, 0.23rem + 0.1vw, 0.3rem);
+  --size-2: clamp(0.5rem, 0.47rem + 0.17vw, 0.6rem);
+  --size-3: clamp(0.75rem, 0.7rem + 0.25vw, 0.9rem);
+  --size-4: clamp(1rem, 0.93rem + 0.33vw, 1.2rem);
+  --size-5: clamp(1.25rem, 1.17rem + 0.42vw, 1.5rem);
+  --size-6: clamp(1.5rem, 1.37rem + 0.67vw, 2rem);
+  --size-7: clamp(2rem, 1.83rem + 0.83vw, 2.5rem);
+  --size-8: clamp(3rem, 2.67rem + 1.67vw, 4rem);
+
+  /* ── Typography ── */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+
+  --font-size-00: 0.7rem;
+  --font-size-0: 0.8rem;
+  --font-size-1: clamp(0.9rem, 0.87rem + 0.15vw, 1rem);
+  --font-size-2: clamp(1.08rem, 1rem + 0.4vw, 1.33rem);
+  --font-size-3: clamp(1.25rem, 1.13rem + 0.6vw, 1.66rem);
+  --font-size-4: clamp(1.5rem, 1.3rem + 1vw, 2.2rem);
+  --font-size-5: clamp(1.8rem, 1.5rem + 1.5vw, 2.9rem);
+  --font-size-6: clamp(2.2rem, 1.7rem + 2.5vw, 4rem);
+
+  --font-lineheight-1: 1.1;
+  --font-lineheight-2: 1.35;
+  --font-lineheight-3: 1.55;
+  --font-lineheight-4: 1.7;
+
+  --font-weight-4: 400;
+  --font-weight-5: 500;
+  --font-weight-6: 600;
+  --font-weight-7: 700;
+
+  /* ── Borders ── */
+  --border-size-1: 1px;
+  --border-size-2: 2px;
+  --border-size-3: 3px;
+
+  /* ── Radii ── */
+  --radius-1: 3px;
+  --radius-2: 6px;
+  --radius-3: 8px;
+  --radius-4: 12px;
+  --radius-5: 16px;
+  --radius-round: 999px;
+
+  /* ── Shadows ── */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-2: 0 1px 4px rgba(0, 0, 0, 0.1);
+  --shadow-3: 0 4px 12px -2px rgba(0, 0, 0, 0.12);
+  --shadow-4: 0 8px 24px -4px rgba(0, 0, 0, 0.18);
+  --shadow-5: 0 16px 40px -8px rgba(0, 0, 0, 0.22);
+  --shadow-6: 0 24px 60px -12px rgba(0, 0, 0, 0.28);
+
+  /* ── Z-index layers ── */
+  --layer-1: 1;
+  --layer-2: 10;
+  --layer-3: 50;
+  --layer-4: 100;
+  --layer-5: 200;
+
+  /* ── Focus ── */
+  --focus-size: 2px;
+  --focus-offset: 2px;
+  --focus-l: 30%;
+
+  /* ── Transitions ── */
+  --ease-1: cubic-bezier(0.25, 0, 0.5, 1);
+  --ease-2: cubic-bezier(0.25, 0, 0.4, 1);
+  --ease-out-1: cubic-bezier(0, 0, 0.58, 1);
+  --ease-out-3: cubic-bezier(0, 0, 0.3, 1);
+  --ease-in-out-1: cubic-bezier(0.42, 0, 0.58, 1);
+
+  accent-color: var(--accent, royalblue);
+  color-scheme: light dark;
+}
+
+
+/* ═══════════════════════════════════
+   Dark Mode
+   ═══════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent-l: 62%;
+    --error-l: 62%;
+    --focus-l: -30%;
+    --fore: var(--light);
+    --back: var(--dark);
+
+    --gray-0: #1a1a1a;
+    --gray-50: #222;
+    --gray-100: hsl(0, 0%, 15%);
+    --gray-200: hsl(0, 0%, 22%);
+    --gray-300: hsl(0, 0%, 30%);
+    --gray-400: hsl(0, 0%, 42%);
+    --gray-500: hsl(0, 0%, 55%);
+    --gray-600: hsl(0, 0%, 65%);
+    --gray-700: hsl(0, 0%, 75%);
+    --gray-800: hsl(0, 0%, 85%);
+    --gray-900: hsl(0, 0%, 92%);
+
+    --surface-1: var(--dark);
+    --surface-2: hsl(0, 0%, 16%);
+    --surface-3: hsl(0, 0%, 22%);
+    --text-1: var(--fore);
+    --text-2: var(--gray-500);
+
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-2: 0 1px 4px rgba(0, 0, 0, 0.35);
+    --shadow-3: 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+    --shadow-4: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+    --shadow-5: 0 16px 40px -8px rgba(0, 0, 0, 0.55);
+    --shadow-6: 0 24px 60px -12px rgba(0, 0, 0, 0.6);
+  }
+}
+
+
+/* ═══════════════════════════════════
+   Focus & Validation
+   ═══════════════════════════════════ */
+
+:is(a, button, input, textarea, select, summary):focus:not(:focus-visible) {
+  outline: none;
+}
+
+:is(a, button, input, textarea, select, summary):focus-visible {
+  outline: max(var(--focus-size, 2px), 1px) solid var(--accent, royalblue);
+  outline-offset: var(--focus-offset, 2px);
+}
+
+:is(input, textarea, select):not(:focus):not(:placeholder-shown):invalid {
+  outline: max(var(--focus-size, 1px), 1px) solid var(--error, crimson);
+  outline-offset: var(--focus-offset, 0);
+}
+
+
+/* ═══════════════════════════════════
+   Base Reset
+   ═══════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0 solid transparent;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+html {
+  font-family: var(--font-sans);
+  font-size: 100%;
+  line-height: var(--font-lineheight-3, 1.55);
+  color: var(--text-1);
+  background-color: var(--back);
+}
+
+body {
+  min-height: 100dvh;
+}
+
+img, picture, svg, video, canvas {
+  display: block;
+  max-width: 100%;
+}
+
+img, picture, svg, video {
+  block-size: auto;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+a {
+  cursor: pointer;
+  color: var(--link, inherit);
+}
+
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+button, [role="button"] {
+  cursor: pointer;
+  background-color: transparent;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+  max-width: 65ch;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
