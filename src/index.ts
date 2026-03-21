@@ -19,11 +19,13 @@ import Details from "./components/Details.svelte";
 import Dialog from "./components/Dialog.svelte";
 import Divider from "./components/Divider.svelte";
 import DropdownMenu from "./components/DropdownMenu.svelte";
+import Fieldset from "./components/Fieldset.svelte";
 import Flex from "./components/Flex.svelte";
 import Form from "./components/Form.svelte";
 import Grid from "./components/Grid.svelte";
 import Image from "./components/Image.svelte";
 import Input from "./components/Input.svelte";
+import Kbd from "./components/Kbd.svelte";
 import InputStringArray from "./components/InputStringArray.svelte";
 import MarkdownEditor from "./components/MarkdownEditor.svelte";
 import MarkdownViewer from "./components/MarkdownViewer.svelte";
@@ -43,6 +45,7 @@ import Spinner from "./components/Spinner.svelte";
 import Table from "./components/Table.svelte";
 import Tabs from "./components/Tabs.svelte";
 import Tag from "./components/Tag.svelte";
+import Textarea from "./components/Textarea.svelte";
 import Toast from "./components/Toast.svelte";
 import Toggle from "./components/Toggle.svelte";
 import Tooltip from "./components/Tooltip.svelte";
@@ -62,11 +65,13 @@ const Nimbus = {
   Dialog,
   Divider,
   DropdownMenu,
+  Fieldset,
   Flex,
   Form,
   Grid,
   Image,
   Input,
+  Kbd,
   InputStringArray,
   MarkdownEditor,
   MarkdownViewer,
@@ -86,6 +91,7 @@ const Nimbus = {
   Table,
   Tabs,
   Tag,
+  Textarea,
   Toast,
   Toggle,
   Tooltip,
