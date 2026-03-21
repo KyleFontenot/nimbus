@@ -1,8 +1,8 @@
 <script lang="ts">
-  interface Props {
-    style?: string | undefined
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLElement> {
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

@@ -1,13 +1,12 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLDetailsAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLDetailsAttributes {
     open?: boolean
     summary?: string | null
-    name?: string | undefined
     disabled?: boolean
-    style?: string | undefined
     summarySnippet?: import('svelte').Snippet
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

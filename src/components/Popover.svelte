@@ -1,13 +1,12 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     open?: boolean
     position?: 'top' | 'bottom' | 'left' | 'right'
     trigger?: Snippet
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

@@ -1,11 +1,11 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     columns?: string
     gap?: string
     maxWidth?: string
-    style?: string | undefined
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

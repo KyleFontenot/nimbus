@@ -1,17 +1,13 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLFormAttributes } from 'svelte/elements'
 
   type EnhanceAction = (node: HTMLFormElement) => { destroy?: () => void } | void
 
-  interface Props {
-    action?: string | undefined
-    method?: 'GET' | 'POST'
+  interface Props extends HTMLFormAttributes {
     enhance?: EnhanceAction | undefined
-    enctype?: string | undefined
     loading?: boolean
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

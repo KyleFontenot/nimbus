@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import Spinner from '../components/Spinner.svelte'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     value?: string
     placeholder?: string
     loading?: boolean
@@ -12,8 +13,6 @@
     shortcutHint?: string | undefined
     onsubmit?: ((e: SubmitEvent) => void) | undefined
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

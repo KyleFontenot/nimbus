@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     value?: string
     placeholder?: string
     searchFn: (query: string) => unknown[] | Promise<unknown[]>
@@ -11,9 +12,7 @@
     name?: string | null
     form?: string | undefined
     resultSnippet?: Snippet<[unknown]>
-    style?: string | undefined
     children?: Snippet
-    [key: string]: unknown
   }
 
   let {

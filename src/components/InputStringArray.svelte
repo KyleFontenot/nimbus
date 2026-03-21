@@ -1,5 +1,7 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     value?: string[]
     name?: string | null
     form?: string | undefined
@@ -7,8 +9,6 @@
     label?: string | null
     disabled?: boolean
     separator?: string
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

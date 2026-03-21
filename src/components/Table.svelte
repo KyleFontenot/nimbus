@@ -1,6 +1,7 @@
 <script lang="ts">
-  interface Props {
-    style?: string | undefined
+  import type { HTMLTableAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLTableAttributes {
     spreadsheet?: boolean
     alternatingrows?: boolean
     grid?: boolean
@@ -10,7 +11,6 @@
     striped?: boolean
     hoverable?: boolean
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

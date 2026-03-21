@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
   interface Social {
     href: string
@@ -7,7 +8,7 @@
     icon?: Snippet
   }
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     name: string
     email?: string | undefined
     phone?: string | undefined
@@ -15,8 +16,6 @@
     hours?: string | undefined
     socials?: Social[]
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

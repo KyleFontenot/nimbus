@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
   interface NavItem {
     href: string
@@ -8,11 +9,9 @@
     active?: boolean
   }
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLElement> {
     items: NavItem[]
     alwaysVisible?: boolean
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

@@ -1,12 +1,12 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLDialogAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLDialogAttributes {
     open?: boolean
     modal?: boolean
     label?: string | undefined
     closeable?: boolean
-    style?: string | undefined
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

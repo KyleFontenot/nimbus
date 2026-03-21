@@ -1,11 +1,11 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLSpanElement> {
     width?: string
     height?: string
     circle?: boolean
     lines?: number
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

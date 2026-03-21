@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
   interface MenuItem {
     label: string
@@ -10,13 +11,11 @@
     onclick?: () => void
   }
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     items: MenuItem[]
     open?: boolean
     trigger?: Snippet
     align?: 'left' | 'right'
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

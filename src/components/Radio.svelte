@@ -1,16 +1,11 @@
 <script lang="ts">
-  interface Props {
-    name: string
+  import type { HTMLFieldsetAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLFieldsetAttributes {
     options?: Array<{ value: string; label?: string; disabled?: boolean }>
     value?: string
-    id?: string | undefined
-    disabled?: boolean
-    required?: boolean
     direction?: 'row' | 'column'
-    form?: string | undefined
-    style?: string | undefined
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

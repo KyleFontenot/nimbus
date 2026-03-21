@@ -1,11 +1,9 @@
 <script lang="ts">
-  interface Props {
-    value?: number | null
-    max?: number
+  import type { HTMLProgressAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLProgressAttributes {
     label?: string | null
     size?: 'small' | 'medium' | 'large'
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

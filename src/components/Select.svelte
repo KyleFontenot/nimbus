@@ -1,19 +1,13 @@
 <script lang="ts">
-  interface Props {
-    name?: string | null
-    id?: string | null
+  import type { HTMLSelectAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLSelectAttributes {
     label?: string | null
     options?: Array<{ value: string; text?: string; disabled?: boolean }> | null
     value?: string | null
     blankDefault?: boolean
     blankLabel?: string
-    disabled?: boolean
-    required?: boolean
-    multiple?: boolean
-    form?: string | undefined
-    style?: string | undefined
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

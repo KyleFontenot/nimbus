@@ -1,26 +1,22 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLButtonAttributes } from 'svelte/elements'
+
   type buttonTypes = 'button' | 'input' | 'link' | 'submit' | 'upload'
   type colorTypes = 'white' | 'primary' | 'secondary'
-  interface Props {
+  interface Props extends HTMLButtonAttributes {
     type?: buttonTypes
     href?: string | null
     outlined?: boolean
     color?: colorTypes
     newWindow?: boolean
-    style?: string | null
     leftArrow?: boolean | null
     className?: string
     download?: string | null
     minimal?: boolean
-    disabled?: boolean
-    name?: string | undefined
-    value?: string
-    formAction?: string | undefined
     fullWidth?: boolean
     children?: Snippet
     target?: '_self' | '_blank' | '_parent' | '_top'
-    [key: string]: unknown
   }
   let {
     type = 'button',

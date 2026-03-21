@@ -49,9 +49,9 @@
 <script lang="ts">
   import { fly } from 'svelte/transition'
 
-  interface Props {
-    style?: string | undefined
-    [key: string]: unknown
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {
   }
 
   let { style = undefined, ...rest }: Props = $props()

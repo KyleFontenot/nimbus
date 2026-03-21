@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import Button from '../components/Button.svelte'
   import Badge from '../components/Badge.svelte'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     name: string
     price: string
     period?: string
@@ -15,8 +16,6 @@
     badge?: string | undefined
     onselect?: (() => void) | undefined
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

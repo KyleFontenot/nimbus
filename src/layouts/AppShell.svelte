@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     header?: Snippet
     sidebar?: Snippet
     footer?: Snippet
@@ -9,8 +10,6 @@
     sidebarPosition?: 'left' | 'right'
     stickyHeader?: boolean
     stickyFooter?: boolean
-    style?: string | null
-    [key: string]: unknown
   }
 
   let {

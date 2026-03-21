@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import Table from '../components/Table.svelte'
   import Input from '../components/Input.svelte'
   import Pagination from '../components/Pagination.svelte'
@@ -10,7 +11,7 @@
     sortable?: boolean
   }
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     data: any[]
     columns: Column[]
     searchable?: boolean
@@ -18,8 +19,6 @@
     pageSize?: number
     page?: number
     children?: Snippet<[any]>
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

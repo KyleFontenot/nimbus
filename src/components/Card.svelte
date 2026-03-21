@@ -1,12 +1,12 @@
 <script lang="ts">
-  interface Props {
-    style?: string | undefined
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     status?: 'success' | 'failure' | null
     padding?: string | undefined
     header?: import('svelte').Snippet
     footer?: import('svelte').Snippet
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

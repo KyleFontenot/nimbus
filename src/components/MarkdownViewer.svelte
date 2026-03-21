@@ -1,10 +1,10 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLElement> {
     value?: string
     html?: string
     parse?: ((markdown: string) => string | Promise<string>) | undefined
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

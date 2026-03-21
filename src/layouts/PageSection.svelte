@@ -1,14 +1,13 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     maxWidth?: string
     padding?: string | null
     centered?: boolean
     background?: string | null
     children?: Snippet
-    style?: string | null
-    [key: string]: unknown
   }
 
   let {

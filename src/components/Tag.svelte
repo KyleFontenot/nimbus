@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLElement> {
     label?: string
     removable?: boolean
     onremove?: () => void
@@ -9,8 +10,6 @@
     variant?: 'default' | 'primary' | 'success' | 'warning' | 'error'
     size?: 'small' | 'medium'
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

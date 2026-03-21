@@ -3,6 +3,7 @@
   import ConditionalWrapper from './ConditionalWrapper.svelte'
   import 'highlight.js/styles/github.css'
   import type { HLJSApi } from 'highlight.js'
+  import type { HTMLInputAttributes } from 'svelte/elements'
 
   type InputType =
     | 'text'
@@ -14,20 +15,12 @@
     | 'checkbox'
     | 'hidden'
 
-  interface Props {
+  interface Props extends HTMLInputAttributes {
     type?: InputType
     label?: string | null
     incrementor?: boolean
-    id?: string | undefined
-    placeholder?: string | undefined
-    style?: string | undefined
-    maxlength?: number | undefined
-    hidden?: boolean
     value?: string
-    disabled?: boolean
-    name?: string | null
     minimal?: boolean
-    checked?: boolean
     dataVault?: string
     initial?: string | number | undefined
     onChange?: ((e: Event) => void) | undefined
@@ -36,9 +29,7 @@
     flexibleHeight?: boolean
     monospace?: boolean
     code?: boolean
-    required?: boolean
-    form?: string | undefined
-    [key: string]: unknown
+    children?: import('svelte').Snippet
   }
 
   let {

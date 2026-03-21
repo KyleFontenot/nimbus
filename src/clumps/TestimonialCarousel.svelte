@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import TestimonialCard from './TestimonialCard.svelte'
 
   interface Testimonial {
@@ -11,13 +12,11 @@
     rating?: number
   }
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     testimonials?: Testimonial[]
     autoPlay?: boolean
     interval?: number
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

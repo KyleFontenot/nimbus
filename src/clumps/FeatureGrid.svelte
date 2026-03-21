@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
   interface Feature {
     title: string
@@ -7,13 +8,11 @@
     icon?: Snippet
   }
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     features?: Feature[]
     columns?: number
     centered?: boolean
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

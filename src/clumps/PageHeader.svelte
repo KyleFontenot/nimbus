@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import Breadcrumb from '../components/Breadcrumb.svelte'
 
   interface BreadcrumbItem {
@@ -7,14 +8,12 @@
     href?: string
   }
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     title: string
     subtitle?: string | undefined
     breadcrumbs?: BreadcrumbItem[] | undefined
     actions?: Snippet | undefined
     children?: Snippet | undefined
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

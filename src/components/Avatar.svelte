@@ -1,11 +1,11 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLElement> {
     src?: string | null
     alt?: string
     size?: 'small' | 'medium' | 'large' | string
     initials?: string | null
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

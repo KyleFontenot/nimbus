@@ -1,10 +1,11 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import Dialog from '../components/Dialog.svelte'
   import Button from '../components/Button.svelte'
   import Spinner from '../components/Spinner.svelte'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     open?: boolean
     title?: string
     description?: string | undefined
@@ -15,7 +16,6 @@
     oncancel?: (() => void) | undefined
     loading?: boolean
     children?: Snippet
-    [key: string]: unknown
   }
 
   let {

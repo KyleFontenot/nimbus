@@ -5,12 +5,12 @@
     disabled?: boolean
   }
 
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     tabs: Tab[]
     active?: string
-    style?: string | undefined
     children?: import('svelte').Snippet<[string]>
-    [key: string]: unknown
   }
 
   let {

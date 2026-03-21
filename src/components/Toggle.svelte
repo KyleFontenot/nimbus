@@ -1,16 +1,12 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLInputAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLInputAttributes {
     checked?: boolean
     name?: string | null
-    id?: string | undefined
     label?: string | null
-    disabled?: boolean
-    required?: boolean
-    value?: string
     form?: string | undefined
-    style?: string | undefined
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

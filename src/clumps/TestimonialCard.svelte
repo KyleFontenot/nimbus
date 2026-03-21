@@ -1,15 +1,14 @@
 <script lang="ts">
+  import type { HTMLAttributes } from 'svelte/elements'
   import Avatar from '../components/Avatar.svelte'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     quote: string
     author: string
     role?: string | undefined
     company?: string | undefined
     avatar?: string | undefined
     rating?: number | undefined
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

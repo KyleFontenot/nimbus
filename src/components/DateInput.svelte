@@ -1,22 +1,12 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLInputAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLInputAttributes {
     type?: 'date' | 'datetime-local' | 'time' | 'month' | 'week'
     label?: string | null
-    name?: string | null
-    id?: string | undefined
     value?: string
-    min?: string | undefined
-    max?: string | undefined
-    step?: number | string | undefined
-    disabled?: boolean
-    required?: boolean
-    readonly?: boolean
-    placeholder?: string | undefined
-    form?: string | undefined
-    style?: string | undefined
     minimal?: boolean
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

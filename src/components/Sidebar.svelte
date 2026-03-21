@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLElement> {
     open?: boolean
     side?: 'left' | 'right'
     overlay?: boolean
@@ -9,9 +10,7 @@
     persistent?: boolean
     width?: string
     closeable?: boolean
-    style?: string | undefined
     children?: Snippet
-    [key: string]: unknown
   }
 
   let {

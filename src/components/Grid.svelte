@@ -1,6 +1,7 @@
 <script lang="ts">
-  interface Props {
-    style?: string | null
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     direction?: 'column' | 'row'
     columns?: string
     rows?: string
@@ -9,7 +10,6 @@
     padding?: string
     align?: string
     children?: import('svelte').Snippet
-    [key: string]: unknown
   }
 
   let {

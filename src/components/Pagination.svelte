@@ -1,12 +1,12 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLElement> {
     page?: number
     total: number
     perPage?: number
     siblings?: number
-    style?: string | undefined
     onchange?: (page: number) => void
-    [key: string]: unknown
   }
 
   let {

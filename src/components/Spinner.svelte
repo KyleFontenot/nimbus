@@ -1,9 +1,9 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLSpanElement> {
     size?: 'small' | 'medium' | 'large'
     label?: string
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

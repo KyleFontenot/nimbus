@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     value?: string
     name?: string | null
     id?: string | undefined
@@ -19,9 +20,7 @@
     disabled?: boolean
     tabSize?: number
     onImageUpload?: ((file: File) => Promise<string>) | undefined
-    style?: string | undefined
     children?: Snippet
-    [key: string]: unknown
   }
 
   let {

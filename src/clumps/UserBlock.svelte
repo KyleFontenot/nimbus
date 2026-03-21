@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import Avatar from '../components/Avatar.svelte'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     name: string
     subtitle?: string | undefined
     src?: string | undefined
@@ -10,8 +11,6 @@
     size?: 'small' | 'medium' | 'large'
     href?: string | undefined
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

@@ -1,14 +1,14 @@
 <script lang="ts">
+  import type { HTMLAttributes } from 'svelte/elements'
+
   interface Crumb {
     label: string
     href?: string
   }
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLElement> {
     items: Crumb[]
     separator?: string
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

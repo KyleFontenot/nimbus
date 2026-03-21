@@ -1,9 +1,9 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLElement> {
     direction?: 'horizontal' | 'vertical'
     label?: string | null
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

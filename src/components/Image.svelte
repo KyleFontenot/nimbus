@@ -1,19 +1,13 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLImgAttributes } from 'svelte/elements'
 
-  interface Props {
-    src: string
-    alt: string
-    width?: string | number | undefined
-    height?: string | number | undefined
+  interface Props extends HTMLImgAttributes {
     aspectRatio?: string | undefined
-    loading?: 'lazy' | 'eager'
     objectFit?: 'cover' | 'contain' | 'fill' | 'none'
     placeholder?: Snippet
     fallback?: Snippet
     rounded?: boolean
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

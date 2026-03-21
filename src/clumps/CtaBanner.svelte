@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import Button from '../components/Button.svelte'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     title: string
     description?: string | undefined
     buttonLabel: string
@@ -10,8 +11,6 @@
     onclick?: (() => void) | undefined
     variant?: 'default' | 'accent' | 'dark'
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

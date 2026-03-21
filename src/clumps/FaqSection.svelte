@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import Details from '../components/Details.svelte'
 
   interface FaqItem {
@@ -7,13 +8,11 @@
     answer: string
   }
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     items?: FaqItem[]
     title?: string | undefined
     columns?: 1 | 2
     children?: Snippet
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {

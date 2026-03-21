@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { HTMLAttributes } from 'svelte/elements'
   import Input from '../components/Input.svelte'
   import Button from '../components/Button.svelte'
   import Toggle from '../components/Toggle.svelte'
   import Alert from '../components/Alert.svelte'
 
-  interface Props {
+  interface Props extends HTMLAttributes<HTMLDivElement> {
     action?: string
     method?: string
     title?: string
@@ -17,8 +18,6 @@
     loading?: boolean
     error?: string | undefined
     children?: Snippet | undefined
-    style?: string | undefined
-    [key: string]: unknown
   }
 
   let {
