@@ -20,6 +20,16 @@
 			"svelte": "./src/components/*.svelte",
 			"default": "./dist/components/*.js"
 		},
+		"./layouts/*": {
+			"types": "./dist/layouts/*.d.ts",
+			"svelte": "./src/layouts/*.svelte",
+			"default": "./dist/layouts/*.js"
+		},
+		"./clumps/*": {
+			"types": "./dist/clumps/*.d.ts",
+			"svelte": "./src/clumps/*.svelte",
+			"default": "./dist/clumps/*.js"
+		},
 		"./styles/*": "./dist/styles/*",
 		"./utils/*": {
 			"types": "./dist/utils/*.d.ts",

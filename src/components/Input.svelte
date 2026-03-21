@@ -37,6 +37,8 @@
     flexibleHeight?: boolean
     monospace?: boolean
     code?: boolean
+    required?: boolean
+    form?: string | undefined
     [key: string]: unknown
   }
 
@@ -62,6 +64,8 @@
     flexibleHeight = false,
     monospace = false,
     code = false,
+    required = false,
+    form = undefined,
     ...rest
   }: Props = $props()
 
@@ -392,13 +396,13 @@
     padding: $padding;
     outline: 1px solid var(--primary);
     border-radius: 4px;
-    background: white;
+    background: var(--surface-1, var(--white, #fff));
     display: inline-block;
     display: block;
     width: 100%;
     border: 1px solid transparent;
     &::placeholder {
-      color: #aaa;
+      color: var(--gray-400, #aaa);
     }
     &.checkbox {
       outline: none;
@@ -418,7 +422,7 @@
     }
   }
   .minimal {
-    outline: 1px solid #cccccc99;
+    outline: 1px solid var(--gray-300, #cccccc99);
   }
   .minimal.checkbox {
     outline: none;
@@ -484,10 +488,9 @@
     left: 0;
     height: 1.3rem;
     width: 1.3rem;
-    background-color: #f9f9f9;
-    // background: linear-gradient(to bottom right, #fff, #f9f9f9);
+    background-color: var(--gray-50, #f9f9f9);
     border: 1px solid var(--primary);
-    border-radius: 5px;
+    border-radius: var(--radius-2, 5px);
     transition: background-color 0.1s;
   }
 

@@ -61,7 +61,11 @@
     rel={newWindow ? 'noopener' : null}
     style={`--color: var(--${color});${style}`}
   >
-    {value}
+    {#if children}
+      {@render children()}
+    {:else}
+      {value}
+    {/if}
   </a>
 {:else if type === 'submit' || type === 'input'}
   <input
@@ -114,7 +118,11 @@
     {...restProps}
     style={`--color: var(--${color});${style}`}
   >
-    {value}
+    {#if children}
+      {@render children()}
+    {:else}
+      {value}
+    {/if}
   </button>
 {/if}
 
@@ -148,7 +156,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid #777;
+      outline: var(--focus-size, 2px) solid var(--gray-500, #777);
     }
   }
 

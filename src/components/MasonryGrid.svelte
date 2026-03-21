@@ -1,16 +1,32 @@
 <script lang="ts">
-  // import LoadingIcon from "$components/LoadingIcon.svelte";
-  let { children }: { children: import('svelte').Snippet } = $props()
+  interface Props {
+    columns?: string
+    gap?: string
+    maxWidth?: string
+    style?: string | undefined
+    children?: import('svelte').Snippet
+    [key: string]: unknown
+  }
+
+  let {
+    columns = undefined,
+    gap = undefined,
+    maxWidth = undefined,
+    style = undefined,
+    children,
+    ...rest
+  }: Props = $props()
 </script>
 
-<h1>Photos</h1>
-<div class="masonry-grid">
-  {children()}
-  <!-- <div
-    class="masonry-item"
-    class:portrait={}
-    class:landscape={}
-  ></div> -->
+<div
+  class="masonry-grid {rest.class || ''}"
+  style:--column-width={columns}
+  style:--gap={gap}
+  style:--masonry-max-width={maxWidth}
+  {style}
+  {...rest}
+>
+  {@render children?.()}
 </div>
 
 <style>
@@ -22,28 +38,19 @@
     column-gap: var(--gap);
     padding: var(--gap);
     width: 100%;
-    max-width: 1400px;
+    max-width: var(--masonry-max-width, 1400px);
     margin: 0 auto;
   }
-  /* Responsive adjustments */
+
   @media (min-width: 768px) {
-    .masonry-grid {
-      columns: 3;
-    }
+    .masonry-grid { columns: 3; }
   }
-
   @media (min-width: 1024px) {
-    .masonry-grid {
-      columns: 4;
-    }
+    .masonry-grid { columns: 4; }
   }
-
   @media (min-width: 1400px) {
-    .masonry-grid {
-      columns: 5;
-    }
+    .masonry-grid { columns: 5; }
   }
-
   @media (max-width: 767px) {
     .masonry-grid {
       columns: 2;
@@ -51,7 +58,6 @@
       --gap: 12px;
     }
   }
-
   @media (max-width: 480px) {
     .masonry-grid {
       columns: 1;
