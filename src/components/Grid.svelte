@@ -29,7 +29,7 @@
 <div
   class="grid {rest.class || ''}"
   style={`--grid-columns:${columns};
-  --grid-row:${rows};
+  --grid-rows:${rows};
   --gap:${gap};
   --justify:${justify};
   --align:${align};

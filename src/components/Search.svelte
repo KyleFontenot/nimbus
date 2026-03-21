@@ -1,146 +1,244 @@
 <script lang="ts">
-  import Input from './Input.svelte'
-  import { writable, type Writable } from 'svelte/store'
-  // import {allEmployees, fullName} from "./+page.svelte"
+  import type { Snippet } from 'svelte'
 
   interface Props {
-    style?: string | null
-    searchFn: ((any: InputEvent) => unknown) | ((any: InputEvent) => Promise<unknown>)
-    onResultClick?: (() => void) | undefined
+    value?: string
+    placeholder?: string
+    searchFn: (query: string) => unknown[] | Promise<unknown[]>
+    onResultClick?: ((result: unknown) => void) | undefined
     onEmptyValue?: (() => void) | undefined
-    resultsStore?: Writable<unknown[]>
-    show?: Writable<boolean>
     delay?: number
+    name?: string | null
+    form?: string | undefined
+    resultSnippet?: Snippet<[unknown]>
+    style?: string | undefined
+    children?: Snippet
     [key: string]: unknown
   }
 
   let {
-    style = null,
+    value = $bindable(''),
+    placeholder = 'Search...',
     searchFn,
     onResultClick = undefined,
     onEmptyValue = undefined,
-    resultsStore = writable([]),
-    show = writable(false),
-    delay = 600,
+    delay = 400,
+    name = null,
+    form = undefined,
+    resultSnippet,
+    style = undefined,
+    children,
     ...rest
   }: Props = $props()
-  // use the resultStore prop for keeping the result store external for controlling how the results are displayed from the parent
 
-  // const internalresults = $state([]);
-  // const [internalresults, irstore] = fivestore([]);
+  let results: unknown[] = $state([])
+  let showResults = $state(false)
+  let loading = $state(false)
+  let debounceTimer: ReturnType<typeof setTimeout> | undefined = $state()
+  let wrapperEl: HTMLDivElement | undefined = $state()
 
-  // let results : Writable<unknown> = resultsStore ?? irstore;
-  let debounceTimer: ReturnType<typeof setTimeout> | undefined = $state(undefined)
+  function handleInput() {
+    clearTimeout(debounceTimer)
+
+    if (!value.trim()) {
+      results = []
+      showResults = false
+      loading = false
+      onEmptyValue?.()
+      return
+    }
+
+    loading = true
+    debounceTimer = setTimeout(async () => {
+      const searchResults = await searchFn(value)
+      if (Array.isArray(searchResults)) {
+        results = searchResults
+        showResults = results.length > 0
+      }
+      loading = false
+    }, delay)
+  }
+
+  function handleFocus() {
+    if (results.length > 0) showResults = true
+  }
+
+  function handleResultClick(result: unknown) {
+    onResultClick?.(result)
+    showResults = false
+  }
+
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      showResults = false
+    }
+  }
+
+  $effect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (wrapperEl && !wrapperEl.contains(e.target as Node)) {
+        showResults = false
+      }
+    }
+    document.addEventListener('click', handleClickOutside, true)
+    return () => document.removeEventListener('click', handleClickOutside, true)
+  })
 </script>
 
-<!-- <ClickOutside
-	on:clickoutside={() => {
-		show.set(false);
-		// show = false;
-	}}
-	style="display: flex;justify-content:center;text-align: center;"
-> -->
-<div class="wrapper">
-  <div class="searchbar hideonprint {rest.class || ''}" style:style>
-    <Input
-      type="text"
-      placeholder="Search..."
-      style="width: 100%;max-width:25rem;box-shadow: 0 3px 12px -6px #888;"
-      onfocus={() => {
-        show.set(true)
-        // show = true;
-      }}
-      oninput={async (e: InputEvent) => {
-        clearTimeout(debounceTimer)
-        if (e.target.value === '') {
-          if (!resultsStore) {
-            show.set(false)
-            // show = false;
-          }
-          onEmptyValue && onEmptyValue()
-          resultsStore.set([])
-        } else {
-          debounceTimer = setTimeout(async () => {
-            const searchquery = await searchFn(e)
-            if (Array.isArray(searchquery)) {
-              resultsStore.set(searchquery)
-            }
-            // results = searchquery;
-          }, delay)
-        }
-      }}
+<div class="search {rest.class || ''}" bind:this={wrapperEl} {style} {...rest}>
+  <div class="search-input-wrapper">
+    <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path d="M8.5 3a5.5 5.5 0 014.383 8.823l4.147 4.147a.75.75 0 01-1.06 1.06l-4.147-4.147A5.5 5.5 0 118.5 3zm0 1.5a4 4 0 100 8 4 4 0 000-8z" />
+    </svg>
+    <input
+      type="search"
+      class="search-input"
+      bind:value
+      {placeholder}
+      {name}
+      {form}
+      oninput={handleInput}
+      onfocus={handleFocus}
+      onkeydown={handleKeydown}
+      aria-label={placeholder}
+      role="searchbox"
     />
-    {#if !resultsStore && show}
-      <div class="results">
-        {#each $resultsStore as result}
-          <div
-            class="result"
-            role="button"
-            tabindex="0"
-            onclick={() => {}}
-            onkeypress={() => {}}
-          ></div>
-        {/each}
-      </div>
+    {#if loading}
+      <span class="search-loading" aria-hidden="true"></span>
     {/if}
   </div>
+
+  {#if showResults && results.length > 0}
+    <div class="search-results" role="listbox">
+      {#each results as result, i}
+        <button
+          class="search-result"
+          type="button"
+          role="option"
+          tabindex="-1"
+          onclick={() => handleResultClick(result)}
+        >
+          {#if resultSnippet}
+            {@render resultSnippet(result)}
+          {:else}
+            {String(result)}
+          {/if}
+        </button>
+      {/each}
+    </div>
+  {/if}
+
+  {#if children}
+    {@render children()}
+  {/if}
 </div>
 
-<!-- </ClickOutside> -->
-
-<style lang="scss">
-  .searchbar {
-    z-index: 200;
+<style>
+  .search {
     position: relative;
-    display: block;
+    width: 100%;
+    max-width: 25rem;
     margin-inline: auto;
-    text-align: center;
-    margin-bottom: 1rem;
   }
-  .results {
-    z-index: 201;
-    position: relative;
-    top: 2.8rem;
+
+  .search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--size-1, 0.35rem);
+    padding: var(--size-2, 0.5rem) var(--size-3, 0.75rem);
+    background-color: var(--surface-1, var(--white, #fff));
+    border: var(--border-size-1, 1px) solid var(--gray-300, #ccc);
+    border-radius: var(--radius-2, 6px);
+    box-shadow: var(--shadow-1, 0 1px 3px -1px rgba(0, 0, 0, 0.1));
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .search-input-wrapper:focus-within {
+    border-color: var(--accent, var(--primary, royalblue));
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, var(--primary, royalblue)) 20%, transparent);
+  }
+
+  .search-icon {
+    width: 1rem;
+    height: 1rem;
+    color: var(--gray-400, #aaa);
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-size: var(--font-size-1, 0.95rem);
+    color: var(--text-1, var(--fore, currentColor));
+    min-width: 0;
+  }
+
+  .search-input::placeholder {
+    color: var(--gray-400, #aaa);
+  }
+
+  .search-input::-webkit-search-cancel-button,
+  .search-input::-webkit-search-decoration {
+    appearance: none;
+  }
+
+  .search-loading {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--gray-200, #ddd);
+    border-top-color: var(--accent, var(--primary, royalblue));
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .search-results {
     position: absolute;
-    box-shadow: 0 6px 15px -3px #00000099;
-    border-radius: 8px;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: var(--layer-3, 50);
+    background-color: var(--surface-1, var(--white, #fff));
+    border: var(--border-size-1, 1px) solid var(--gray-200, #e0e0e0);
+    border-radius: var(--radius-2, 6px);
+    box-shadow: var(--shadow-3, 0 4px 14px -4px rgba(0, 0, 0, 0.2));
+    overflow: hidden;
+    max-height: 20rem;
+    overflow-y: auto;
   }
-  .result {
-    display: flex;
-    flex-flow: row nowrap;
-    display: grid;
-    grid-template-columns: 1fr 4.5rem;
-    grid-template-rows: 1fr;
-    background-color: white;
-    gap: 1rem;
-    border-bottom: 1px solid #bbb;
-    padding: 0.6rem 0.8rem;
-    color: #444;
-    // border-radius: 8px;
+
+  .search-result {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: var(--size-2, 0.5rem) var(--size-3, 0.75rem);
+    border: none;
+    background: none;
     cursor: pointer;
-    transition: background-color 0.15s;
-    &:last-of-type {
-      border-bottom: 0px solid transparent;
-    }
-    &:hover {
-      background-color: var(--white-2);
-      background-color: #f1f3fd;
-    }
+    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-size: var(--font-size-1, 0.9rem);
+    color: var(--text-1, var(--fore, currentColor));
+    border-bottom: var(--border-size-1, 1px) solid var(--gray-100, #f0f0f0);
+    transition: background-color 0.1s;
   }
-  .extension {
-    justify-content: center;
-    background-color: var(--primary-4);
-    padding: 0.2rem 0.4rem;
-    border-radius: 5px;
-    text-align: center;
-    letter-spacing: 0.2px;
-    font-size: 115%;
-    font-weight: 500;
-    color: #444;
+
+  .search-result:last-child {
+    border-bottom: none;
   }
-  .wrapper {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
+
+  .search-result:hover {
+    background-color: var(--gray-50, #f9f9f9);
+  }
+
+  .search-result:focus-visible {
+    outline: var(--focus-size, 2px) solid var(--accent, var(--primary, royalblue));
+    outline-offset: -2px;
   }
 </style>

@@ -1,132 +1,180 @@
 <script lang="ts" module>
-  import { onDestroy } from 'svelte'
-  import { writable } from 'svelte/store'
-  import { fly } from 'svelte/transition'
-  let links: ToastLink[] | undefined = undefined
+  import type { Snippet } from 'svelte'
 
-  let isVisible = writable(false)
-  let timeout: ReturnType<typeof setTimeout> | undefined = undefined
-  let divel: HTMLDivElement | undefined = $state()
-
-  interface ShowToastOptions {
-    type?: string
-    duration?: number
-    links?: ToastLink[]
-  }
   interface ToastLink {
     href: string
     text: string
   }
 
-  function showToast(
-    newMessage: string,
-    options: ShowToastOptions = {
-      type: 'info',
-      duration: 3000,
-      links: undefined
-    }
-  ) {
-    if (isVisible) {
-      divel?.remove()
-    }
-    isVisible.set(true)
-    timeout = setTimeout(() => {
-      isVisible.set(false)
-    }, options.duration)
+  interface ToastData {
+    message: string
+    type: 'info' | 'success' | 'error'
+    duration: number
+    links?: ToastLink[]
   }
 
-  export { showToast }
+  let toastState: ToastData | null = $state(null)
+  let timeoutId: ReturnType<typeof setTimeout> | undefined
+
+  export function showToast(
+    message: string,
+    options: {
+      type?: 'info' | 'success' | 'error'
+      duration?: number
+      links?: ToastLink[]
+    } = {}
+  ) {
+    if (timeoutId) clearTimeout(timeoutId)
+
+    toastState = {
+      message,
+      type: options.type ?? 'info',
+      duration: options.duration ?? 3000,
+      links: options.links
+    }
+
+    timeoutId = setTimeout(() => {
+      toastState = null
+      timeoutId = undefined
+    }, toastState.duration)
+  }
+
+  export function hideToast() {
+    if (timeoutId) clearTimeout(timeoutId)
+    toastState = null
+    timeoutId = undefined
+  }
 </script>
 
 <script lang="ts">
+  import { fly } from 'svelte/transition'
+
   interface Props {
-    message?: string
-    duration?: number
-    type?: 'info' | 'success' | 'error'
+    style?: string | undefined
+    [key: string]: unknown
   }
-  let { message = '', duration = 3000, type }: Props = $props()
-  onDestroy(() => {
-    timeout && clearTimeout(timeout)
-    divel?.remove()
-  })
+
+  let { style = undefined, ...rest }: Props = $props()
+
+  function handleMouseEnter() {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+      timeoutId = undefined
+    }
+  }
+
+  function handleMouseLeave() {
+    if (toastState) {
+      timeoutId = setTimeout(() => {
+        toastState = null
+        timeoutId = undefined
+      }, 2000)
+    }
+  }
 </script>
 
-{#if $isVisible}
+{#if toastState}
   <div
-    bind:this={divel}
     role="alert"
-    class="toast {type} show"
-    in:fly={{ y: 20, duration: 500 }}
-    out:fly={{ y: -20, duration: 250 }}
-    onmouseenter={() => {
-      timeout = undefined
-    }}
-    onmouseleave={() => {
-      timeout = setTimeout(() => {
-        isVisible.set(false)
-      }, 3000)
-    }}
+    class="toast {toastState.type} {rest.class || ''}"
+    {style}
+    in:fly={{ y: 20, duration: 300 }}
+    out:fly={{ y: -20, duration: 200 }}
+    onmouseenter={handleMouseEnter}
+    onmouseleave={handleMouseLeave}
+    {...rest}
   >
-    {message}
-    {#if links && links.length > 0}
-      <div>
-        {#each links as link}
-          <a class="toastlink" href={link.href}>{link.text}</a>
+    <span class="toast-message">{toastState.message}</span>
+    {#if toastState.links && toastState.links.length > 0}
+      <div class="toast-links">
+        {#each toastState.links as link}
+          <a class="toast-link" href={link.href}>{link.text}</a>
         {/each}
       </div>
     {/if}
+    <button
+      type="button"
+      class="toast-dismiss"
+      aria-label="Dismiss"
+      onclick={hideToast}
+    >&times;</button>
   </div>
 {/if}
 
-<style lang="scss">
+<style>
   .toast {
     position: fixed;
-    bottom: 1.5rem;
-    left: 25%;
-    width: clamp(8rem, 50vw, 60rem);
-    padding: 1.2rem 2rem;
-    border-radius: 0.7rem;
-    color: var(--black);
-    background-color: gray;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.3s;
-    z-index: 200;
-    box-shadow: 0 6px 13px -3px #333333bb;
+    bottom: var(--size-4, 1.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(16rem, 50vw, 40rem);
+    padding: var(--size-3, 0.75rem) var(--size-4, 1rem);
+    border-radius: var(--radius-2, 8px);
+    color: var(--text-1, var(--black, #222));
+    z-index: var(--layer-5, 200);
+    box-shadow: var(--shadow-4, 0 6px 20px -4px rgba(0, 0, 0, 0.3));
     display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
     align-items: center;
+    gap: var(--size-3, 0.75rem);
+    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-size: var(--font-size-1, 0.95rem);
   }
 
-  .toast.show {
+  .toast-message {
+    flex: 1;
+  }
+
+  .info {
+    background-color: var(--gray-100, var(--white-3, #f0f0f0));
+    border: var(--border-size-1, 1px) solid var(--gray-200, var(--white-4, #ddd));
+  }
+
+  .success {
+    background-color: var(--green-1, var(--tertiary4, #e8f5e9));
+    border: var(--border-size-1, 1px) solid var(--green-3, var(--tertiary2, #a5d6a7));
+    color: var(--green-9, var(--tertiary, #2e7d32));
+  }
+
+  .error {
+    background-color: var(--red-1, var(--secondary2, #ffebee));
+    border: var(--border-size-1, 1px) solid var(--red-3, var(--secondary, #ef9a9a));
+    color: var(--red-9, var(--secondary, #c62828));
+  }
+
+  .toast-links {
+    display: flex;
+    gap: var(--size-2, 0.5rem);
+    flex-shrink: 0;
+  }
+
+  .toast-link {
+    padding: var(--size-1, 0.25rem) var(--size-2, 0.5rem);
+    border-radius: var(--radius-2, 4px);
+    background-color: rgba(255, 255, 255, 0.7);
+    color: inherit;
+    text-decoration: none;
+    font-size: var(--font-size-0, 0.85rem);
+    font-weight: 500;
+    border: var(--border-size-1, 1px) solid rgba(0, 0, 0, 0.1);
+  }
+
+  .toast-link:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  .toast-dismiss {
+    background: none;
+    border: none;
+    font-size: var(--font-size-3, 1.25rem);
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.5;
+    line-height: 1;
+    padding: 0 var(--size-1, 0.25rem);
+    flex-shrink: 0;
+  }
+
+  .toast-dismiss:hover {
     opacity: 1;
-    transform: translateY(0);
-  }
-
-  .toast.info {
-    /* background-color: #007bff; */
-    background-color: var(--white-3);
-    outline: 2px solid var(--white-4);
-  }
-  .toast.success {
-    /* background-color: #28a745; */
-    background-color: var(--tertiary4);
-    outline: 2px solid var(--tertiary2);
-    color: var(--tertiary);
-  }
-  .toast.error {
-    /* background-color: #dc3545; */
-    background-color: var(--secondray2);
-    outline: 2px solid var(--secondary);
-    color: var(--secondary);
-  }
-  .toastlink {
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    background-color: var(--white-4);
-    color: var(--black);
-    margin-inline: 0.5rem;
-    outline: 2px solid var(--white-3);
   }
 </style>

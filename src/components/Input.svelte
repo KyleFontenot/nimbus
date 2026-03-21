@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import ConditionalWrapper from './ConditionalWrapper.svelte'
-  import { writable, type Writable } from 'svelte/store'
   import 'highlight.js/styles/github.css'
   import type { HLJSApi } from 'highlight.js'
 
@@ -78,7 +77,7 @@
   }
 
   let hljs: HLJSApi | undefined = $state()
-  let codevalue: undefined | Writable<string> = $state()
+  let codevalue: string = $state(value)
 
   async function loadHighlightJs(): Promise<void> {
     const h = await import('highlight.js/lib/core')
@@ -88,17 +87,15 @@
   }
 
   if (code) {
-    codevalue = writable(value)
     loadHighlightJs()
   }
   $effect(() => {
-    if (codevalue && typeof codevalue.subscribe === 'function') {
+    if (code) {
       if (hljs) {
         const highlighted = hljs.highlightAuto(value)
-        codevalue.set(highlighted.value)
-        // codevalue.set(value);
+        codevalue = highlighted.value
       } else {
-        codevalue.set(value)
+        codevalue = value
       }
     }
   })
@@ -250,8 +247,8 @@
           <pre><code
               contenteditable="true"
               spellcheck="false"
-              bind:innerHTML={$codevalue}
-              oninput={e => ($codevalue = e.target.value)}>{@html $codevalue}</code></pre>
+              bind:innerHTML={codevalue}
+              oninput={e => (codevalue = e.target.value)}>{@html codevalue}</code></pre>
         {/if}
       </ConditionalWrapper>
     {/if}
@@ -380,7 +377,7 @@
         <pre><code
             spellcheck="false"
             contenteditable="true"
-            oninput={e => ($codevalue = e.target.value)}>{@html $codevalue}</code></pre>
+            oninput={e => (codevalue = e.target.value)}>{@html codevalue}</code></pre>
       {/if}
     </ConditionalWrapper>
   {/if}

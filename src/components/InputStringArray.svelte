@@ -1,56 +1,184 @@
 <script lang="ts">
-  import { readableStreamToArrayBuffer } from 'bun'
-  import { writable } from 'svelte/store'
   interface Props {
-    style?: string | null
     value?: string[]
+    name?: string | null
+    form?: string | undefined
+    placeholder?: string
+    label?: string | null
+    disabled?: boolean
+    separator?: string
+    style?: string | undefined
+    [key: string]: unknown
   }
 
-  let { style = null, value = [] }: Props = $props()
-  const array = $state(value)
-  function assessWidth() {
-    const widthOfAllElements = document.getElementsByClassName('intringarraystringitem')
+  let {
+    value = $bindable([]),
+    name = null,
+    form = undefined,
+    placeholder = 'Type and press Enter...',
+    label = null,
+    disabled = false,
+    separator = ',',
+    style = undefined,
+    ...rest
+  }: Props = $props()
+
+  let inputValue = $state('')
+  let inputEl: HTMLInputElement | undefined = $state()
+
+  function addItem() {
+    const trimmed = inputValue.trim()
+    if (trimmed && !value.includes(trimmed)) {
+      value = [...value, trimmed]
+      inputValue = ''
+    }
+  }
+
+  function removeItem(index: number) {
+    value = value.filter((_, i) => i !== index)
+    inputEl?.focus()
+  }
+
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === separator) {
+      e.preventDefault()
+      addItem()
+    } else if (e.key === 'Backspace' && !inputValue && value.length > 0) {
+      removeItem(value.length - 1)
+    }
+  }
+
+  function handlePaste(e: ClipboardEvent) {
+    const pasted = e.clipboardData?.getData('text')
+    if (!pasted) return
+    const items = pasted.split(separator).map(s => s.trim()).filter(Boolean)
+    if (items.length > 1) {
+      e.preventDefault()
+      const unique = items.filter(item => !value.includes(item))
+      value = [...value, ...unique]
+    }
   }
 </script>
 
-<div class="visiblediv">
-  {#if array}
-    {#each array as stringitem}
-      <div class="intringarraystringitem"><code>{stringitem}</code></div>
-    {/each}
-  {/if}
+{#if label}
+  <label class="string-array-label">{label}</label>
+{/if}
+<div
+  class="string-array {rest.class || ''}"
+  class:disabled
+  {style}
+  onclick={() => inputEl?.focus()}
+  role="group"
+  {...rest}
+>
+  {#each value as item, i}
+    <span class="string-array-tag">
+      <span class="string-array-tag-text">{item}</span>
+      {#if !disabled}
+        <button
+          type="button"
+          class="string-array-tag-remove"
+          aria-label="Remove {item}"
+          onclick={() => removeItem(i)}
+          tabindex="-1"
+        >&times;</button>
+      {/if}
+    </span>
+  {/each}
   <input
-    class="invisibletextinput"
-    style={`left:${23}px;`}
-    onkeydown={e => {
-      e.stopPropagation()
-      e.preventDefault()
-      // e.target.value += e.key;
-    }}
+    bind:this={inputEl}
+    bind:value={inputValue}
+    class="string-array-input"
+    {placeholder}
+    {disabled}
+    onkeydown={handleKeydown}
+    onpaste={handlePaste}
+    onblur={addItem}
   />
+  {#if name}
+    <input type="hidden" {name} {form} value={value.join(separator)} />
+  {/if}
 </div>
 
-<style lang="scss">
-  .visiblediv {
-    padding: 8px;
-    outline: 1px solid var(--primary);
-    border-radius: 4px;
-    background: white;
+<style>
+  .string-array-label {
+    display: block;
+    font-weight: 500;
+    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-size: var(--font-size-1, 0.95rem);
+    margin-bottom: var(--size-1, 0.25rem);
+    color: var(--text-1, var(--fore, currentColor));
+  }
+
+  .string-array {
     display: flex;
-    flex-flow: row wrap;
-    width: 100%;
-    border: 1px solid transparent;
-    position: relative;
-    min-height: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--size-1, 0.3rem);
+    padding: var(--size-1, 0.3rem) var(--size-2, 0.5rem);
+    border: var(--border-size-1, 1px) solid var(--gray-400, #999);
+    border-radius: var(--radius-2, 4px);
+    background-color: var(--surface-1, var(--white, #fff));
+    min-height: 2.5rem;
+    cursor: text;
+    transition: border-color 0.15s;
   }
-  .invisibletextinput {
-    position: absolute;
-    top: 0;
-    outline: 0;
+
+  .string-array:focus-within {
+    border-color: var(--accent, var(--primary, royalblue));
+    outline: var(--focus-size, 2px) solid var(--accent, var(--primary, royalblue));
+    outline-offset: var(--focus-offset, 1px);
   }
-  .stringitem {
-    padding: 0.25rem;
-    border: var(--white-5);
-    background: var(--white-2);
+
+  .string-array.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .string-array-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    padding: var(--size-1, 0.15rem) var(--size-2, 0.4rem);
+    background-color: var(--gray-100, var(--white-2, #f0f0f0));
+    border: var(--border-size-1, 1px) solid var(--gray-200, #ddd);
+    border-radius: var(--radius-2, 4px);
+    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-size: var(--font-size-0, 0.85rem);
+    color: var(--text-1, var(--fore, currentColor));
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .string-array-tag-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-500, #888);
+    font-size: 1em;
+    line-height: 1;
+    padding: 0 0.1rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .string-array-tag-remove:hover {
+    color: var(--red-7, var(--error, #d32f2f));
+  }
+
+  .string-array-input {
+    flex: 1;
+    min-width: 6rem;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-size: var(--font-size-1, 0.9rem);
+    color: var(--text-1, var(--fore, currentColor));
+    padding: var(--size-1, 0.2rem) 0;
+  }
+
+  .string-array-input::placeholder {
+    color: var(--gray-400, #aaa);
   }
 </style>

@@ -93,7 +93,7 @@
     }
     & :global(th) {
       font-weight: 500;
-      padding: 8px 88px;
+      padding: 8px 12px;
       transition: background-color 0.05s;
       // font-size: 1.15rem;
       vertical-align: middle;

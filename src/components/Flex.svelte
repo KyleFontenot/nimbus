@@ -1,5 +1,4 @@
 <script lang="ts">
-  type FlowType = ''
   interface Props {
     style?: string | null
     direction?: 'column' | 'row'
@@ -11,6 +10,7 @@
     padding?: string | null
     justify?: string | null
     align?: string | null
+    margin?: string | null
     children?: import('svelte').Snippet
     [key: string]: unknown
   }
@@ -26,6 +26,7 @@
     padding = null,
     justify = 'center',
     align = null,
+    margin = null,
     children,
     ...rest
   }: Props = $props()
@@ -37,54 +38,35 @@
   class:row={direction === 'row'}
   class:wrap
   {id}
-  style={`${childMaxWidth ? `--flexbox-childmaxwidth:${childMaxWidth};` : ''}${
-    gap ? `--flexbox-gap:${gap};` : ''
-  }${flexGrow ? `--flexbox-flexgrow:${flexGrow}` : ''}${
-    padding ? `--flexbox-padding:${padding};` : ''
-  }${justify ? `--flexbox-justify:${justify};` : ''}${
-    align ? `--flexbox-align:${align};` : ''
-  }${style};`}
+  style:--flexbox-childmaxwidth={childMaxWidth}
+  style:--flexbox-gap={gap}
+  style:--flexbox-flexgrow={flexGrow}
+  style:--flexbox-padding={padding}
+  style:--flexbox-justify={justify}
+  style:--flexbox-align={align}
+  style:--flexbox-margin={margin}
+  {style}
+  {...rest}
 >
   {@render children?.()}
 </div>
 
-<style lang="scss">
+<style>
   .flexbox {
     display: flex;
-    gap: var(--flexbox-gap);
-    // gap: 1rem;
-    flex-grow: var(--flexbox-flexgrow);
-    padding: var(--flexbox-padding);
-    justify-content: var(--flexbox-justify);
-    align-content: var(--flexbox-align);
-    margin-block: 1.5rem;
+    gap: var(--flexbox-gap, 0);
+    flex-grow: var(--flexbox-flexgrow, 0);
+    padding: var(--flexbox-padding, 0);
+    justify-content: var(--flexbox-justify, center);
+    align-content: var(--flexbox-align, normal);
+    margin-block: var(--flexbox-margin, 0);
+  }
 
-    & > :global(*) {
-      max-width: var(--flexbox-childmaxwidth);
-    }
+  .flexbox > :global(*) {
+    max-width: var(--flexbox-childmaxwidth, none);
   }
-  .column {
-    flex-direction: column;
-  }
-  .row {
-    flex-direction: row;
-  }
-  .wrap {
-    flex-wrap: wrap;
-  }
-  .space-around {
-    justify-content: space-around;
-  }
-  .space-between {
-    justify-content: space-between;
-  }
-  .center {
-    justify-content: center;
-  }
-  .flex-end {
-    justify-content: flex-end;
-  }
-  .flex-start {
-    justify-content: flex-start;
-  }
+
+  .column { flex-direction: column; }
+  .row { flex-direction: row; }
+  .wrap { flex-wrap: wrap; }
 </style>

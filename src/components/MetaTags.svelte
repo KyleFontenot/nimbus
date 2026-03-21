@@ -287,12 +287,16 @@
       <meta name="twitter:card" content="player" />
       <meta name="twitter:title" content={twitter.title} />
       <meta name="twitter:site" content={twitter.site} />
-      {#if twitter.description}{/if}
+      {#if twitter.description}
+        <meta name="twitter:description" content={twitter.description} />
+      {/if}
       <meta name="twitter:player" content={twitter.url} />
 
       <meta name="twitter:player:width" content={twitter.playerWidth.toString()} />
       <meta name="twitter:player:height" content={twitter.playerHeight.toString()} />
-      <meta name="twitter:image" content={twitter.playerHeight.toString()} />
+      {#if twitter.image}
+        <meta name="twitter:image" content={twitter.image} />
+      {/if}
       {#if twitter.imageAlt}
         <meta name="twitter:image:alt" content={twitter.imageAlt} />
       {/if}
