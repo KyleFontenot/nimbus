@@ -1,40 +1,105 @@
 <script lang="ts">
   import type { HTMLAttributes } from 'svelte/elements'
+  import type { Component } from 'svelte'
+  import { createRawSnippet, mount, unmount } from 'svelte'
+  import { extractComponents, type ComponentBlock } from '../utils/markdownComponents.js'
 
   interface Props extends HTMLAttributes<HTMLElement> {
+    /** Raw markdown string (requires `parse` to render) */
     value?: string
+    /** Pre-rendered HTML to display directly */
     html?: string
+    /** Function to convert markdown → HTML. Async is supported. */
     parse?: ((markdown: string) => string | Promise<string>) | undefined
+    /**
+     * Map of component names to Svelte components.
+     * Any matching tags in the markdown (e.g. `<Alert type="warning">…</Alert>`)
+     * will be replaced with live Svelte component instances.
+     */
+    components?: Record<string, Component>
   }
 
   let {
     value = '',
     html = '',
     parse = undefined,
+    components = {},
     style = undefined,
     ...rest
   }: Props = $props()
 
   let rendered = $state(html)
+  let componentBlocks: ComponentBlock[] = $state([])
+  let articleEl: HTMLElement | undefined = $state()
+  let mountedInstances: ReturnType<typeof mount>[] = []
+
+  const componentNames = $derived(Object.keys(components))
+
+  function processHtml(rawHtml: string): string {
+    if (!componentNames.length) {
+      componentBlocks = []
+      return rawHtml
+    }
+    const result = extractComponents(rawHtml, componentNames)
+    componentBlocks = result.blocks
+    return result.html
+  }
 
   $effect(() => {
     if (html) {
-      rendered = html
+      rendered = processHtml(html)
     } else if (parse && value) {
       const result = parse(value)
       if (result instanceof Promise) {
-        result.then((h) => { rendered = h })
+        result.then((h) => { rendered = processHtml(h) })
       } else {
-        rendered = result
+        rendered = processHtml(result)
       }
     } else {
       rendered = ''
+      componentBlocks = []
+    }
+  })
+
+  // Mount Svelte components into placeholder divs after the HTML is rendered
+  $effect(() => {
+    // Subscribe to these so the effect re-runs when they change
+    const _blocks = componentBlocks
+    const _el = articleEl
+
+    // Cleanup previous mounts
+    for (const instance of mountedInstances) {
+      try { unmount(instance) } catch { /* already unmounted */ }
+    }
+    mountedInstances = []
+
+    if (!_el || !_blocks.length) return
+
+    for (const block of _blocks) {
+      const target = _el.querySelector(`[data-nimbus-component="${block.id}"]`)
+      if (!target || !components[block.name]) continue
+
+      const props: Record<string, any> = { ...block.props }
+
+      // If the block has children HTML, create a raw snippet for it
+      if (block.children) {
+        const childHtml = block.children
+        props.children = createRawSnippet(() => ({
+          render: () => childHtml,
+        }))
+      }
+
+      const instance = mount(components[block.name], { target, props })
+      target.removeAttribute('aria-busy')
+      mountedInstances.push(instance)
     }
   })
 </script>
 
 <article
+  bind:this={articleEl}
   class="md-viewer {rest.class || ''}"
+  aria-label="Rendered markdown content"
   {style}
   {...rest}
 >

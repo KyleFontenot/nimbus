@@ -1,6 +1,9 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import type { Component } from 'svelte'
   import type { HTMLAttributes } from 'svelte/elements'
+  import { createRawSnippet, mount, unmount } from 'svelte'
+  import { extractComponents, type ComponentBlock } from '../utils/markdownComponents.js'
 
   interface Props extends HTMLAttributes<HTMLDivElement> {
     value?: string
@@ -9,6 +12,12 @@
     form?: string | undefined
     placeholder?: string
     parse?: ((markdown: string) => string | Promise<string>) | undefined
+    /**
+     * Map of component names to Svelte components.
+     * Any matching tags in the markdown (e.g. `<Alert type="warning">…</Alert>`)
+     * will be replaced with live Svelte component instances in the preview.
+     */
+    components?: Record<string, Component>
     toolbar?: boolean
     preview?: boolean
     splitView?: boolean
@@ -30,6 +39,7 @@
     form = undefined,
     placeholder = 'Write markdown...',
     parse = undefined,
+    components = {},
     toolbar = true,
     preview = $bindable(false),
     splitView = $bindable(false),
@@ -49,6 +59,21 @@
   let textareaEl: HTMLTextAreaElement | undefined = $state()
   let previewHtml = $state('')
   let fileInputEl: HTMLInputElement | undefined = $state()
+  let previewEl: HTMLElement | undefined = $state()
+  let componentBlocks: ComponentBlock[] = $state([])
+  let mountedInstances: ReturnType<typeof mount>[] = []
+
+  const componentNames = $derived(Object.keys(components))
+
+  function processPreviewHtml(rawHtml: string): string {
+    if (!componentNames.length) {
+      componentBlocks = []
+      return rawHtml
+    }
+    const result = extractComponents(rawHtml, componentNames)
+    componentBlocks = result.blocks
+    return result.html
+  }
 
   // Word/char count
   let stats = $derived.by(() => {
@@ -65,10 +90,41 @@
     if ((preview || splitView) && parse) {
       const result = parse(value)
       if (result instanceof Promise) {
-        result.then((html) => { previewHtml = html })
+        result.then((html) => { previewHtml = processPreviewHtml(html) })
       } else {
-        previewHtml = result
+        previewHtml = processPreviewHtml(result)
       }
+    }
+  })
+
+  // Mount Svelte components into preview placeholder divs
+  $effect(() => {
+    const _blocks = componentBlocks
+    const _el = previewEl
+
+    for (const instance of mountedInstances) {
+      try { unmount(instance) } catch { /* already unmounted */ }
+    }
+    mountedInstances = []
+
+    if (!_el || !_blocks.length) return
+
+    for (const block of _blocks) {
+      const target = _el.querySelector(`[data-nimbus-component="${block.id}"]`)
+      if (!target || !components[block.name]) continue
+
+      const props: Record<string, any> = { ...block.props }
+
+      if (block.children) {
+        const childHtml = block.children
+        props.children = createRawSnippet(() => ({
+          render: () => childHtml,
+        }))
+      }
+
+      const instance = mount(components[block.name], { target, props })
+      target.removeAttribute('aria-busy')
+      mountedInstances.push(instance)
     }
   })
 
@@ -271,63 +327,63 @@
 >
   {#if toolbar}
     <div class="md-toolbar" role="toolbar" aria-label="Formatting">
-      <div class="md-toolbar-group">
-        <button type="button" class="md-btn" title="Bold (Ctrl+B)" onclick={actions.bold} {disabled}><strong>B</strong></button>
-        <button type="button" class="md-btn" title="Italic (Ctrl+I)" onclick={actions.italic} {disabled}><em>I</em></button>
-        <button type="button" class="md-btn" title="Strikethrough (Ctrl+Shift+X)" onclick={actions.strikethrough} {disabled}><s>S</s></button>
+      <div class="md-toolbar-group" role="group" aria-label="Text formatting">
+        <button type="button" class="md-btn" aria-label="Bold (Ctrl+B)" title="Bold (Ctrl+B)" onclick={actions.bold} {disabled}><strong>B</strong></button>
+        <button type="button" class="md-btn" aria-label="Italic (Ctrl+I)" title="Italic (Ctrl+I)" onclick={actions.italic} {disabled}><em>I</em></button>
+        <button type="button" class="md-btn" aria-label="Strikethrough (Ctrl+Shift+X)" title="Strikethrough (Ctrl+Shift+X)" onclick={actions.strikethrough} {disabled}><s>S</s></button>
       </div>
 
-      <span class="md-toolbar-divider"></span>
+      <span class="md-toolbar-divider" role="separator"></span>
 
-      <div class="md-toolbar-group">
-        <button type="button" class="md-btn" title="Heading 1" onclick={actions.h1} {disabled}>H1</button>
-        <button type="button" class="md-btn" title="Heading 2" onclick={actions.h2} {disabled}>H2</button>
-        <button type="button" class="md-btn" title="Heading 3" onclick={actions.h3} {disabled}>H3</button>
+      <div class="md-toolbar-group" role="group" aria-label="Headings">
+        <button type="button" class="md-btn" aria-label="Heading 1" title="Heading 1" onclick={actions.h1} {disabled}>H1</button>
+        <button type="button" class="md-btn" aria-label="Heading 2" title="Heading 2" onclick={actions.h2} {disabled}>H2</button>
+        <button type="button" class="md-btn" aria-label="Heading 3" title="Heading 3" onclick={actions.h3} {disabled}>H3</button>
       </div>
 
-      <span class="md-toolbar-divider"></span>
+      <span class="md-toolbar-divider" role="separator"></span>
 
-      <div class="md-toolbar-group">
-        <button type="button" class="md-btn" title="Link (Ctrl+K)" onclick={actions.link} {disabled}>
-          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"/></svg>
+      <div class="md-toolbar-group" role="group" aria-label="Insert">
+        <button type="button" class="md-btn" aria-label="Insert link (Ctrl+K)" title="Link (Ctrl+K)" onclick={actions.link} {disabled}>
+          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"/></svg>
         </button>
-        <button type="button" class="md-btn" title="Image" onclick={actions.image} {disabled}>
-          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
-        </button>
-      </div>
-
-      <span class="md-toolbar-divider"></span>
-
-      <div class="md-toolbar-group">
-        <button type="button" class="md-btn" title="Inline code (Ctrl+E)" onclick={actions.inlineCode} {disabled}>
-          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
-        </button>
-        <button type="button" class="md-btn" title="Code block" onclick={actions.codeBlock} {disabled}>
-          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm5.5 2.5a.5.5 0 00-.854-.354l-2 2a.5.5 0 000 .708l2 2a.5.5 0 00.854-.354v-4zm3 0a.5.5 0 01.854-.354l2 2a.5.5 0 010 .708l-2 2a.5.5 0 01-.854-.354v-4z" clip-rule="evenodd"/></svg>
+        <button type="button" class="md-btn" aria-label="Insert image" title="Image" onclick={actions.image} {disabled}>
+          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
         </button>
       </div>
 
-      <span class="md-toolbar-divider"></span>
+      <span class="md-toolbar-divider" role="separator"></span>
 
-      <div class="md-toolbar-group">
-        <button type="button" class="md-btn" title="Bullet list" onclick={actions.ul} {disabled}>
-          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path fill-rule="evenodd" d="M6 4a1 1 0 011 1h10a1 1 0 110 2H7a1 1 0 01-1-1zm0 5a1 1 0 011 0h10a1 1 0 110 2H7a1 1 0 010-2zm0 5a1 1 0 011 0h10a1 1 0 110 2H7a1 1 0 010-2zM3 5a1 1 0 112 0 1 1 0 01-2 0zm0 5a1 1 0 112 0 1 1 0 01-2 0zm0 5a1 1 0 112 0 1 1 0 01-2 0z" clip-rule="evenodd"/></svg>
+      <div class="md-toolbar-group" role="group" aria-label="Code">
+        <button type="button" class="md-btn" aria-label="Inline code (Ctrl+E)" title="Inline code (Ctrl+E)" onclick={actions.inlineCode} {disabled}>
+          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
         </button>
-        <button type="button" class="md-btn" title="Numbered list" onclick={actions.ol} {disabled}>
-          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path fill-rule="evenodd" d="M7 4h10a1 1 0 110 2H7a1 1 0 01-1-1 1 1 0 011-1zm0 5h10a1 1 0 110 2H7a1 1 0 010-2zm0 5h10a1 1 0 110 2H7a1 1 0 010-2zM3.5 4.5a.75.75 0 01.75.75v2a.5.5 0 01-1 0V6h-.5a.5.5 0 010-1h.75z" clip-rule="evenodd"/></svg>
-        </button>
-        <button type="button" class="md-btn" title="Blockquote" onclick={actions.quote} {disabled}>
-          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path fill-rule="evenodd" d="M6 3.75A2.75 2.75 0 003.25 6.5v2.5A2.75 2.75 0 006 11.75h.25v1.5a.75.75 0 001.28.53l2.03-2.03H6A1.25 1.25 0 014.75 10.5V6.5A1.25 1.25 0 016 5.25h8A1.25 1.25 0 0115.25 6.5v4a1.25 1.25 0 01-1.25 1.25.75.75 0 000 1.5A2.75 2.75 0 0016.75 10.5v-4A2.75 2.75 0 0014 3.75H6z" clip-rule="evenodd"/></svg>
+        <button type="button" class="md-btn" aria-label="Code block" title="Code block" onclick={actions.codeBlock} {disabled}>
+          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm5.5 2.5a.5.5 0 00-.854-.354l-2 2a.5.5 0 000 .708l2 2a.5.5 0 00.854-.354v-4zm3 0a.5.5 0 01.854-.354l2 2a.5.5 0 010 .708l-2 2a.5.5 0 01-.854-.354v-4z" clip-rule="evenodd"/></svg>
         </button>
       </div>
 
-      <span class="md-toolbar-divider"></span>
+      <span class="md-toolbar-divider" role="separator"></span>
 
-      <div class="md-toolbar-group">
-        <button type="button" class="md-btn" title="Table" onclick={actions.table} {disabled}>
-          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path fill-rule="evenodd" d="M5 4a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1H5zm0 2h3v3H5V6zm5 0h5v3h-5V6zM5 11h3v3H5v-3zm5 0h5v3h-5v-3z" clip-rule="evenodd"/></svg>
+      <div class="md-toolbar-group" role="group" aria-label="Lists and quotes">
+        <button type="button" class="md-btn" aria-label="Bullet list" title="Bullet list" onclick={actions.ul} {disabled}>
+          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path fill-rule="evenodd" d="M6 4a1 1 0 011 1h10a1 1 0 110 2H7a1 1 0 01-1-1zm0 5a1 1 0 011 0h10a1 1 0 110 2H7a1 1 0 010-2zm0 5a1 1 0 011 0h10a1 1 0 110 2H7a1 1 0 010-2zM3 5a1 1 0 112 0 1 1 0 01-2 0zm0 5a1 1 0 112 0 1 1 0 01-2 0zm0 5a1 1 0 112 0 1 1 0 01-2 0z" clip-rule="evenodd"/></svg>
         </button>
-        <button type="button" class="md-btn" title="Horizontal rule" onclick={actions.hr} {disabled}>&mdash;</button>
+        <button type="button" class="md-btn" aria-label="Numbered list" title="Numbered list" onclick={actions.ol} {disabled}>
+          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path fill-rule="evenodd" d="M7 4h10a1 1 0 110 2H7a1 1 0 01-1-1 1 1 0 011-1zm0 5h10a1 1 0 110 2H7a1 1 0 010-2zm0 5h10a1 1 0 110 2H7a1 1 0 010-2zM3.5 4.5a.75.75 0 01.75.75v2a.5.5 0 01-1 0V6h-.5a.5.5 0 010-1h.75z" clip-rule="evenodd"/></svg>
+        </button>
+        <button type="button" class="md-btn" aria-label="Blockquote" title="Blockquote" onclick={actions.quote} {disabled}>
+          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path fill-rule="evenodd" d="M6 3.75A2.75 2.75 0 003.25 6.5v2.5A2.75 2.75 0 006 11.75h.25v1.5a.75.75 0 001.28.53l2.03-2.03H6A1.25 1.25 0 014.75 10.5V6.5A1.25 1.25 0 016 5.25h8A1.25 1.25 0 0115.25 6.5v4a1.25 1.25 0 01-1.25 1.25.75.75 0 000 1.5A2.75 2.75 0 0016.75 10.5v-4A2.75 2.75 0 0014 3.75H6z" clip-rule="evenodd"/></svg>
+        </button>
+      </div>
+
+      <span class="md-toolbar-divider" role="separator"></span>
+
+      <div class="md-toolbar-group" role="group" aria-label="Structure">
+        <button type="button" class="md-btn" aria-label="Insert table" title="Table" onclick={actions.table} {disabled}>
+          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path fill-rule="evenodd" d="M5 4a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1H5zm0 2h3v3H5V6zm5 0h5v3h-5V6zM5 11h3v3H5v-3zm5 0h5v3h-5v-3z" clip-rule="evenodd"/></svg>
+        </button>
+        <button type="button" class="md-btn" aria-label="Horizontal rule" title="Horizontal rule" onclick={actions.hr} {disabled}>&mdash;</button>
       </div>
 
       <div class="md-toolbar-right">
@@ -336,29 +392,35 @@
             type="button"
             class="md-btn"
             class:md-btn-active={splitView}
+            aria-label="Toggle split view"
+            aria-pressed={splitView}
             title="Split view"
             onclick={() => { splitView = !splitView; if (splitView) preview = false }}
           >
-            <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm1 0v12h5V4H4zm7 0v12h5V4h-5z"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm1 0v12h5V4H4zm7 0v12h5V4h-5z"/></svg>
           </button>
           <button
             type="button"
             class="md-btn"
             class:md-btn-active={preview && !splitView}
+            aria-label="Toggle preview"
+            aria-pressed={preview && !splitView}
             title="Preview"
             onclick={() => { preview = !preview; if (preview) splitView = false }}
           >
-            <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
           </button>
         {/if}
         <button
           type="button"
           class="md-btn"
           class:md-btn-active={fullscreen}
+          aria-label="Toggle fullscreen"
+          aria-pressed={fullscreen}
           title="Fullscreen"
           onclick={() => (fullscreen = !fullscreen)}
         >
-          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon">
+          <svg viewBox="0 0 20 20" fill="currentColor" class="md-icon" aria-hidden="true">
             {#if fullscreen}
               <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 110-2h4a1 1 0 011 1v4a1 1 0 11-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 112 0v1.586l2.293-2.293a1 1 0 011.414 1.414L6.414 15H8a1 1 0 110 2H4a1 1 0 01-1-1v-4zm13 0a1 1 0 10-2 0v1.586l-2.293-2.293a1 1 0 00-1.414 1.414L13.586 15H12a1 1 0 100 2h4a1 1 0 001-1v-4z" clip-rule="evenodd"/>
             {:else}
@@ -377,6 +439,7 @@
           bind:this={textareaEl}
           bind:value
           class="md-textarea"
+          aria-label="Markdown editor"
           {name}
           {id}
           {form}
@@ -391,13 +454,13 @@
       </div>
     {/if}
     {#if (preview || splitView) && parse}
-      <div class="md-preview-pane" class:md-split-pane={splitView}>
-        <div class="md-preview-content">
+      <div class="md-preview-pane" class:md-split-pane={splitView} role="region" aria-label="Markdown preview">
+        <div class="md-preview-content" bind:this={previewEl} aria-live="polite">
           {@html previewHtml}
         </div>
       </div>
     {:else if preview && !parse}
-      <div class="md-preview-pane">
+      <div class="md-preview-pane" role="region" aria-label="Markdown preview">
         <pre class="md-preview-raw">{value}</pre>
       </div>
     {/if}
@@ -422,6 +485,7 @@
       type="file"
       accept="image/*"
       class="md-file-input"
+      aria-label="Upload image"
       onchange={handleFileUpload}
       tabindex="-1"
     />
