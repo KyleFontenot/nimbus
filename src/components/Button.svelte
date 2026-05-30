@@ -122,7 +122,7 @@
   </button>
 {/if}
 
-<style lang="scss">
+<style>
   .button {
     color: white;
     color: var(--white);
@@ -145,15 +145,15 @@
     background-color: var(--color);
     cursor: pointer;
     transition: transform 0.2s;
+  }
 
-    &:hover,
-    &:focus-visible {
-      transform: translate3d(0, -3px, 0);
-    }
+  .button:hover,
+  .button:focus-visible {
+    transform: translate3d(0, -3px, 0);
+  }
 
-    &:focus-visible {
-      outline: var(--focus-size, 2px) solid var(--gray-500, #777);
-    }
+  .button:focus-visible {
+    outline: var(--focus-size, 2px) solid var(--gray-500, #777);
   }
 
   .outlined {

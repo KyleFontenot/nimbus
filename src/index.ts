@@ -1,3 +1,5 @@
+import type { Component } from 'svelte';
+
 // Barrel re-exports
 export * from './components';
 export * from './layouts';
@@ -50,7 +52,7 @@ import Toast from "./components/Toast.svelte";
 import Toggle from "./components/Toggle.svelte";
 import Tooltip from "./components/Tooltip.svelte";
 
-const Nimbus = {
+const Nimbus: Record<string, Component<any>> = {
   Alert,
   Avatar,
   Badge,

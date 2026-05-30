@@ -378,10 +378,9 @@
 
 {/if} -->
 
-<style lang="scss">
-  $padding: 8px;
+<style>
   .input {
-    padding: $padding;
+    padding: 8px;
     outline: 1px solid var(--primary);
     border-radius: 4px;
     background: var(--surface-1, var(--white, #fff));
@@ -389,12 +388,12 @@
     display: block;
     width: 100%;
     border: 1px solid transparent;
-    &::placeholder {
-      color: var(--gray-400, #aaa);
-    }
-    &.checkbox {
-      outline: none;
-    }
+  }
+  .input::placeholder {
+    color: var(--gray-400, #aaa);
+  }
+  .input.checkbox {
+    outline: none;
   }
   .textarea {
     width: 80%;
@@ -405,9 +404,9 @@
     resize: none;
     line-height: 1.2rem;
     font-family: var(--font1);
-    &.monospace {
-      font-family: monospace;
-    }
+  }
+  .textarea.monospace {
+    font-family: monospace;
   }
   .minimal {
     outline: 1px solid var(--gray-300, #cccccc99);
@@ -512,59 +511,49 @@
     height: 12px;
     border: solid white;
     border-width: 0 3px 3px 0;
-    // -webkit-transform: rotate(49deg);
-    // -ms-transform: rotate(52deg);
     transform: rotate(35deg);
   }
 
-  .checkmarkcontainer.disabled {
-    &:hover input ~ .checkmark {
-      background-color: #f9f9f9;
-    }
-    & input:checked ~ .checkmark {
-      background-color: #bbb;
-    }
-    & > .checkmark {
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-    }
+  .checkmarkcontainer.disabled:hover input ~ .checkmark {
+    background-color: #f9f9f9;
+  }
+  .checkmarkcontainer.disabled input:checked ~ .checkmark {
+    background-color: #bbb;
+  }
+  .checkmarkcontainer.disabled > .checkmark {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
   }
 
   :global(.textareahighlightcodediv) {
-    // border: 1px solid red;
     position: relative;
-    pre {
-      position: absolute;
-      top: 0;
-      left: 0;
-      padding: $padding;
-      display: block;
-      height: 100%;
-      width: 100%;
-
-      z-index: 9;
-      cursor: text;
-      code {
-        top: 0;
-        position: relative;
-        margin-inline: unset;
-        font-size: inherit;
-        padding: 0;
-        margin: 0;
-        // color: red;
-        // z-index: 10;
-      }
-    }
-    pre,
-    textarea {
-      font-family: monospace;
-      font-size: 0.9rem;
-      line-height: 1.2rem;
-    }
-    textarea {
-      // color: blue;
-      color: transparent;
-      // background-color: transparent;
-    }
+  }
+  :global(.textareahighlightcodediv) pre {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 8px;
+    display: block;
+    height: 100%;
+    width: 100%;
+    z-index: 9;
+    cursor: text;
+  }
+  :global(.textareahighlightcodediv) pre code {
+    top: 0;
+    position: relative;
+    margin-inline: unset;
+    font-size: inherit;
+    padding: 0;
+    margin: 0;
+  }
+  :global(.textareahighlightcodediv) pre,
+  :global(.textareahighlightcodediv) textarea {
+    font-family: monospace;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+  }
+  :global(.textareahighlightcodediv) textarea {
+    color: transparent;
   }
 </style>

@@ -1,59 +1,61 @@
 {
-	"name": "nimbus",
-	"version": "0.5.2",
-	"description": "A non-tailwind Svelte 5 Component library meant for simplistic handling and high-level styling.",
+	"name": "@kfontenot/nimbus",
+	"version": "0.6.0",
+	"description": "A vanilla CSS Svelte 5 Component library",
 	"type": "module",
 	"license": "GNU GPLv3",
 	"private": false,
-	"main": "dist/index.js",
-	"module": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"svelte": "src/index.js",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"svelte": "./dist/index.js",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"svelte": "./src/index.js",
+			"svelte": "./dist/index.js",
 			"default": "./dist/index.js"
 		},
 		"./components/*": {
-			"types": "./dist/components/*.d.ts",
-			"svelte": "./src/components/*.svelte",
-			"default": "./dist/components/*.js"
+			"types": "./dist/components/*.svelte.d.ts",
+			"svelte": "./dist/components/*.svelte",
+			"default": "./dist/components/*.svelte"
 		},
 		"./layouts/*": {
-			"types": "./dist/layouts/*.d.ts",
-			"svelte": "./src/layouts/*.svelte",
-			"default": "./dist/layouts/*.js"
+			"types": "./dist/layouts/*.svelte.d.ts",
+			"svelte": "./dist/layouts/*.svelte",
+			"default": "./dist/layouts/*.svelte"
 		},
 		"./clumps/*": {
-			"types": "./dist/clumps/*.d.ts",
-			"svelte": "./src/clumps/*.svelte",
-			"default": "./dist/clumps/*.js"
+			"types": "./dist/clumps/*.svelte.d.ts",
+			"svelte": "./dist/clumps/*.svelte",
+			"default": "./dist/clumps/*.svelte"
 		},
-		"./styles/*": "./src/style/*",
+		"./styles/*": "./dist/style/*",
 		"./utils/*": {
 			"types": "./dist/utils/*.d.ts",
 			"default": "./dist/utils/*.js"
 		}
 	},
-	"files": ["dist", "src"],
+	"files": ["dist"],
 	"scripts": {
-		"build": "bun run ./build.ts",
+		"build": "svelte-package -i src -o dist",
 		"lint": "biome check .",
 		"format": "biome format .",
 		"check": "biome check .",
 		"prepublishOnly": "npm run build"
 	},
 	"homepage": "https://github.com/KyleFontenot/nimbus#readme",
+	"publishConfig": {
+		"access": "public"
+	},
 	"peerDependencies": {
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
-		"@sveltejs/kit": "^2.16.1",
-		"@types/bun": "^1.2.0",
-		"@typescript-eslint/eslint-plugin": "^4.22.0",
-		"@typescript-eslint/parser": "^4.22.0",
+		"@sveltejs/package": "^2.3.0",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"svelte": "^5.0.0",
 		"typescript": "^5.5.0"
 	},
 	"dependencies": {

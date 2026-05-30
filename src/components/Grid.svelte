@@ -39,7 +39,7 @@
   {@render children?.()}
 </div>
 
-<style lang="scss">
+<style>
   .grid {
     display: grid;
     grid-template-columns: var(--grid-columns);
@@ -47,6 +47,6 @@
     justify-items: var(--justify);
     align-items: var(--align);
     gap: var(--gap);
-    // border: 2px solid var(--border);
+    /* border: 2px solid var(--border); */
   }
 </style>
