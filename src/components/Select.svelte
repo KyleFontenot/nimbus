@@ -4,7 +4,7 @@
   interface Props extends HTMLSelectAttributes {
     label?: string | null
     options?: Array<{ value: string; text?: string; disabled?: boolean }> | null
-    value?: string | null
+    value?: string | string[] | null
     blankDefault?: boolean
     blankLabel?: string
     children?: import('svelte').Snippet
@@ -20,7 +20,7 @@
     blankLabel = '---',
     disabled = false,
     required = false,
-    multiple = false,
+    multiple,
     form = undefined,
     style = undefined,
     children,
@@ -28,23 +28,7 @@
   }: Props = $props()
 </script>
 
-{#if label}
-  <label class="select-label" for={id}>
-    {label}
-  </label>
-{/if}
-<select
-  class="select {rest.class || ''}"
-  {name}
-  {id}
-  {disabled}
-  {required}
-  {multiple}
-  {form}
-  {style}
-  bind:value
-  {...rest}
->
+{#snippet selectOptions()}
   {#if blankDefault}
     <option value="">{blankLabel}</option>
   {/if}
@@ -54,7 +38,43 @@
     {/each}
   {/if}
   {@render children?.()}
-</select>
+{/snippet}
+
+{#if label}
+  <label class="select-label" for={id}>
+    {label}
+  </label>
+{/if}
+{#if multiple}
+  <select
+    class="select {rest.class || ''}"
+    {name}
+    {id}
+    {disabled}
+    {required}
+    multiple
+    {form}
+    {style}
+    bind:value
+    {...rest}
+  >
+    {@render selectOptions()}
+  </select>
+{:else}
+  <select
+    class="select {rest.class || ''}"
+    {name}
+    {id}
+    {disabled}
+    {required}
+    {form}
+    {style}
+    bind:value
+    {...rest}
+  >
+    {@render selectOptions()}
+  </select>
+{/if}
 
 <style>
   .select-label {
