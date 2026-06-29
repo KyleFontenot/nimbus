@@ -11,7 +11,7 @@ type KeyPair = {
 	d: number;
 };
 
-const modPow = (_base: number, _exponent: number, modulus: number) => {
+export const modPow = (_base: number, _exponent: number, modulus: number) => {
 	let base = _base;
 	let exponent = _exponent;
 	if (modulus === 1) return 0;
