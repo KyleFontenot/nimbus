@@ -65,6 +65,6 @@
   .form {
     display: block;
     width: 100%;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
   }
 </style>

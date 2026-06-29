@@ -41,9 +41,9 @@
     justify-content: space-between;
     align-items: baseline;
     margin-bottom: var(--size-1, 0.25rem);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.9rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .progress-label-value {
@@ -72,14 +72,14 @@
     border-radius: var(--radius-round, 999px);
   }
   .progress::-webkit-progress-value {
-    background-color: var(--accent, var(--primary, royalblue));
+    background-color: var(--accent);
     border-radius: var(--radius-round, 999px);
     transition: width 0.3s ease;
   }
 
   /* Firefox */
   .progress::-moz-progress-bar {
-    background-color: var(--accent, var(--primary, royalblue));
+    background-color: var(--accent);
     border-radius: var(--radius-round, 999px);
   }
 
@@ -89,7 +89,7 @@
     background: linear-gradient(
       90deg,
       var(--gray-200, #e0e0e0) 0%,
-      var(--accent, var(--primary, royalblue)) 50%,
+      var(--accent) 50%,
       var(--gray-200, #e0e0e0) 100%
     );
     background-size: 200% 100%;

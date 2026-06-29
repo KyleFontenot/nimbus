@@ -27,7 +27,7 @@
     font-size: 0.85em;
     font-weight: var(--font-weight-5, 500);
     line-height: 1.4;
-    color: var(--gray-700, var(--black-2, #444));
+    color: var(--gray-700);
     background-color: var(--gray-50, #f9f9f9);
     border: var(--border-size-1, 1px) solid var(--gray-200, #ddd);
     border-bottom-width: 2px;

@@ -74,9 +74,9 @@
     align-items: center;
     gap: var(--size-2, 0.5rem);
     cursor: pointer;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 1rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     user-select: none;
   }
 
@@ -99,7 +99,7 @@
     height: 1.25rem;
     border: var(--border-size-2, 2px) solid var(--gray-400, #999);
     border-radius: var(--radius-round, 50%);
-    background-color: var(--surface-1, var(--white, #fff));
+    background-color: var(--surface-1);
     flex-shrink: 0;
     position: relative;
     transition: border-color 0.15s ease;
@@ -114,12 +114,12 @@
     width: 0.55rem;
     height: 0.55rem;
     border-radius: var(--radius-round, 50%);
-    background-color: var(--accent, var(--primary, royalblue));
+    background-color: var(--accent);
     transition: transform 0.15s ease;
   }
 
   .radio-input:checked + .radio-control {
-    border-color: var(--accent, var(--primary, royalblue));
+    border-color: var(--accent);
   }
 
   .radio-input:checked + .radio-control::after {

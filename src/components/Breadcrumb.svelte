@@ -55,9 +55,9 @@
   }
 
   .breadcrumb-link {
-    color: var(--accent, var(--primary, royalblue));
+    color: var(--accent);
     text-decoration: none;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.9rem);
   }
 
@@ -67,7 +67,7 @@
 
   .breadcrumb-current {
     color: var(--gray-500, #888);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.9rem);
   }
 

@@ -188,8 +188,8 @@
     width: var(--sidebar-width, 280px);
     min-height: 0;
     height: 100%;
-    background-color: var(--surface-1, var(--white, #fff));
-    color: var(--text-1, var(--fore, currentColor));
+    background-color: var(--surface-1);
+    color: var(--text-1);
     border-color: var(--gray-200, #e0e0e0);
     border-style: solid;
     border-width: 0;
@@ -263,7 +263,7 @@
   }
 
   .sidebar-close:hover {
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     background-color: var(--gray-100, #f0f0f0);
   }
 

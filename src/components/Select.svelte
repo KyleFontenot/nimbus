@@ -80,10 +80,10 @@
   .select-label {
     display: block;
     font-weight: 400;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.9rem);
     margin-bottom: var(--size-1, 0.25rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .select {
@@ -93,8 +93,8 @@
     padding-right: var(--size-6, 2rem);
     border: var(--border-size-1, 1px) solid var(--gray-400, #999);
     border-radius: var(--radius-2, 4px);
-    background-color: var(--surface-1, var(--white, #fff));
-    color: var(--text-1, var(--fore, currentColor));
+    background-color: var(--surface-1);
+    color: var(--text-1);
     font-family: inherit;
     font-size: var(--font-size-1, 1rem);
     line-height: var(--font-lineheight-3, 1.6);

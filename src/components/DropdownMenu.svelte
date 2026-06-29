@@ -189,8 +189,8 @@
     top: calc(100% + 4px);
     z-index: var(--layer-4, 100);
     min-width: 10rem;
-    background-color: var(--surface-1, var(--white, #fff));
-    color: var(--text-1, var(--fore, currentColor));
+    background-color: var(--surface-1);
+    color: var(--text-1);
     border: var(--border-size-1, 1px) solid var(--gray-200, #e0e0e0);
     border-radius: var(--radius-3, 8px);
     padding: var(--size-1, 0.25rem);
@@ -228,7 +228,7 @@
     background: none;
     font: inherit;
     font-size: var(--font-size-1, 0.9rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     text-decoration: none;
     text-align: left;
     cursor: pointer;
@@ -240,7 +240,7 @@
   .dropdown-item:hover,
   .dropdown-item-focused {
     background-color: var(--gray-100, #f0f0f0);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .dropdown-item:active {

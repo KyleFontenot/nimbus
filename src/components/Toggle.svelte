@@ -56,7 +56,7 @@
     gap: var(--size-2, 0.5rem);
     cursor: pointer;
     user-select: none;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
   }
 
   .toggle-label.disabled {
@@ -89,14 +89,14 @@
     left: 2px;
     width: calc(1.5rem - 4px);
     height: calc(1.5rem - 4px);
-    background-color: var(--surface-1, var(--white, #fff));
+    background-color: var(--surface-1);
     border-radius: var(--radius-round, 999px);
     transition: transform 0.2s ease;
     box-shadow: var(--shadow-2, 0 1px 3px rgba(0, 0, 0, 0.2));
   }
 
   .toggle-input:checked + .toggle-track {
-    background-color: var(--accent, var(--primary, royalblue));
+    background-color: var(--accent);
   }
 
   .toggle-input:checked + .toggle-track .toggle-thumb {
@@ -110,6 +110,6 @@
 
   .toggle-text {
     font-size: var(--font-size-1, 1rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 </style>

@@ -112,10 +112,10 @@
 
 <style>
   .md-viewer {
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.95rem);
     line-height: var(--font-lineheight-4, 1.7);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
@@ -163,9 +163,9 @@
   .md-viewer :global(blockquote) {
     margin: 0 0 var(--size-3, 1rem);
     padding: var(--size-2, 0.5rem) var(--size-4, 1rem);
-    border-left: 4px solid var(--gray-300, var(--primary-4, #ccc));
-    background-color: var(--gray-50, var(--white-2, #fafafa));
-    color: var(--gray-700, var(--black-2, #444));
+    border-left: 4px solid var(--gray-300);
+    background-color: var(--gray-50);
+    color: var(--gray-700);
   }
   .md-viewer :global(blockquote p:last-child) {
     margin-bottom: 0;
@@ -214,7 +214,7 @@
     margin: var(--size-4, 1.5rem) 0;
   }
   .md-viewer :global(a) {
-    color: var(--accent, var(--primary, royalblue));
+    color: var(--accent);
     text-decoration: underline;
   }
   .md-viewer :global(img) {

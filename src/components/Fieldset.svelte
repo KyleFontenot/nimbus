@@ -45,10 +45,10 @@
   }
 
   .fieldset-legend {
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.95rem);
     font-weight: var(--font-weight-6, 600);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     padding-inline: var(--size-2, 0.5rem);
   }
 </style>

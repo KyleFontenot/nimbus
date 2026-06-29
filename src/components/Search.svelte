@@ -145,7 +145,7 @@
     align-items: center;
     gap: var(--size-1, 0.35rem);
     padding: var(--size-2, 0.5rem) var(--size-3, 0.75rem);
-    background-color: var(--surface-1, var(--white, #fff));
+    background-color: var(--surface-1);
     border: var(--border-size-1, 1px) solid var(--gray-300, #ccc);
     border-radius: var(--radius-2, 6px);
     box-shadow: var(--shadow-1, 0 1px 3px -1px rgba(0, 0, 0, 0.1));
@@ -153,8 +153,8 @@
   }
 
   .search-input-wrapper:focus-within {
-    border-color: var(--accent, var(--primary, royalblue));
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, var(--primary, royalblue)) 20%, transparent);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent);
   }
 
   .search-icon {
@@ -169,9 +169,9 @@
     border: none;
     outline: none;
     background: transparent;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.95rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     min-width: 0;
   }
 
@@ -188,7 +188,7 @@
     width: 1rem;
     height: 1rem;
     border: 2px solid var(--gray-200, #ddd);
-    border-top-color: var(--accent, var(--primary, royalblue));
+    border-top-color: var(--accent);
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
     flex-shrink: 0;
@@ -204,7 +204,7 @@
     left: 0;
     right: 0;
     z-index: var(--layer-3, 50);
-    background-color: var(--surface-1, var(--white, #fff));
+    background-color: var(--surface-1);
     border: var(--border-size-1, 1px) solid var(--gray-200, #e0e0e0);
     border-radius: var(--radius-2, 6px);
     box-shadow: var(--shadow-3, 0 4px 14px -4px rgba(0, 0, 0, 0.2));
@@ -221,9 +221,9 @@
     border: none;
     background: none;
     cursor: pointer;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.9rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     border-bottom: var(--border-size-1, 1px) solid var(--gray-100, #f0f0f0);
     transition: background-color 0.1s;
   }
@@ -237,7 +237,7 @@
   }
 
   .search-result:focus-visible {
-    outline: var(--focus-size, 2px) solid var(--accent, var(--primary, royalblue));
+    outline: var(--focus-size, 2px) solid var(--accent);
     outline-offset: -2px;
   }
 </style>

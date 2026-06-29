@@ -46,8 +46,8 @@
   .details {
     border: var(--border-size-1, 1px) solid var(--gray-200, #e0e0e0);
     border-radius: var(--radius-2, 4px);
-    background-color: var(--surface-1, var(--white, #fff));
-    color: var(--text-1, var(--fore, currentColor));
+    background-color: var(--surface-1);
+    color: var(--text-1);
   }
 
   .details.disabled {
@@ -63,7 +63,7 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--size-2, 0.5rem);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-weight: 500;
     user-select: none;
   }

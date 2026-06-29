@@ -1,189 +1,152 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
-  import type { HTMLButtonAttributes } from 'svelte/elements'
+  import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements'
 
-  type buttonTypes = 'button' | 'input' | 'link' | 'submit' | 'upload'
-  type colorTypes = 'white' | 'primary' | 'secondary'
+  // When `href` is set the component renders as <a>.
+  // When `upload` is true it renders as <input type="file">.
+  // Otherwise it renders as <button> and `type` maps to the native button type.
   interface Props extends HTMLButtonAttributes {
-    type?: buttonTypes
-    href?: string | null
-    outlined?: boolean
-    color?: colorTypes
-    newWindow?: boolean
-    leftArrow?: boolean | null
-    className?: string
-    download?: string | null
-    minimal?: boolean
+    href?: string
+    target?: HTMLAnchorAttributes['target']
+    download?: string | boolean
+    upload?: boolean
+    variant?: 'filled' | 'outlined' | 'minimal'
+    color?: 'primary' | 'secondary' | 'white'
     fullWidth?: boolean
+    leftArrow?: boolean
     children?: Snippet
-    target?: '_self' | '_blank' | '_parent' | '_top'
   }
+
   let {
-    type = 'button',
-    href = null,
-    outlined = false,
+    href = undefined,
+    target = undefined,
+    download = undefined,
+    upload = false,
+    variant = 'filled',
     color = 'primary',
-    newWindow = false,
-    style = null,
-    leftArrow = null,
-    className = '',
-    download = null,
-    minimal = false,
-    disabled = false,
-    name = undefined,
-    value = '',
-    formAction = undefined,
     fullWidth = false,
+    leftArrow = false,
+    type = 'button',
+    disabled = false,
+    class: className = '',
+    style = undefined,
+    value = undefined,
     children,
-    ...restProps
+    ...rest
   }: Props = $props()
 </script>
 
-{#if type === 'link'}
+{#if href !== undefined}
   <a
     {href}
+    {target}
     {download}
-    class="button {restProps?.class || ''}"
-    class:outlined
-    class:white={color === 'white'}
-    class:buttonLeftarrow={leftArrow}
-    class:primary={color === 'primary'}
-    class:secondary={color === 'secondary'}
+    class="button {className}"
+    class:outlined={variant === 'outlined'}
+    class:minimal={variant === 'minimal'}
     class:fullwidth={fullWidth}
-    class:minimal
-    class:disabled
-    {...restProps}
-    target={newWindow ? '_blank' : (restProps?.target as Props['target']) || undefined}
-    rel={newWindow ? 'noopener' : null}
-    style={`--color: var(--${color});${style}`}
+    class:left-arrow={leftArrow}
+    data-color={color}
+    aria-disabled={disabled || undefined}
+    {style}
+    {...rest}
   >
-    {#if children}
-      {@render children()}
-    {:else}
-      {value}
-    {/if}
+    {@render children?.()}
   </a>
-{:else if type === 'submit' || type === 'input'}
-  <input
-    type="submit"
-    class="button {restProps?.class || ''}"
-    class:outlined
-    class:white={color === 'white'}
-    class:buttonLeftarrow={leftArrow}
-    class:primary={color === 'primary'}
-    class:secondary={color === 'secondary'}
-    class:minimal
-    class:fullwidth={fullWidth}
-    class:disabled
-    formaction={formAction}
-    {value}
-    {...restProps}
-    style={`--color: var(--${color});${style}`}
-  />
-{:else if type === 'upload'}
+{:else if upload}
   <input
     type="file"
-    class:outlined
-    class:white={color === 'white'}
-    class:buttonLeftarrow={leftArrow}
-    class:primary={color === 'primary'}
-    class:secondary={color === 'secondary'}
-    class:minimal
-    class="button {restProps.class || ''}"
-    class:disabled
+    class="button {className}"
+    class:outlined={variant === 'outlined'}
+    class:minimal={variant === 'minimal'}
+    class:fullwidth={fullWidth}
+    data-color={color}
+    {disabled}
+    {style}
     {value}
-    style={`--color: var(--${color});${style}`}
-    id={name}
-    {name}
-    {...restProps}
+    {...rest}
   />
 {:else}
   <button
-    class="button {restProps.class || ''}"
-    class:outlined
     {type}
-    class:white={color === 'white'}
-    class:buttonLeftarrow={leftArrow}
-    class:primary={color === 'primary'}
-    class:secondary={color === 'secondary'}
+    class="button {className}"
+    class:outlined={variant === 'outlined'}
+    class:minimal={variant === 'minimal'}
     class:fullwidth={fullWidth}
-    tabindex="0"
-    class:minimal
-    formaction={formAction}
+    class:left-arrow={leftArrow}
+    data-color={color}
+    {disabled}
+    {style}
     {value}
-    {...restProps}
-    style={`--color: var(--${color});${style}`}
+    {...rest}
   >
-    {#if children}
-      {@render children()}
-    {:else}
-      {value}
-    {/if}
+    {@render children?.()}
   </button>
 {/if}
 
 <style>
   .button {
-    color: white;
-    color: var(--white);
+    --_color: var(--color, var(--accent));
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-2);
     padding: 0.43rem 0.9rem;
-    position: relative;
-    font-size: 0.75rem;
-    font-family: var(--font2);
+    font-size: var(--font-size-0);
+    font-family: var(--font-sans);
+    font-weight: 500;
     letter-spacing: 0.2px;
-    letter-spacing: 0.4px;
-    font-weight: 525;
-    display: inline-block;
-    height: auto;
-    width: auto;
-    min-width: auto;
-    border: none;
-    border-color: var(--color);
-    border-width: 0;
-    border-style: solid;
-    box-shadow: 0 2px 5px -4px var(--color);
-    background-color: var(--color);
+    line-height: 1;
+    border-radius: var(--radius, var(--radius-2));
+    border: 1px solid transparent;
+    background-color: var(--_color);
+    color: white;
+    box-shadow: 0 2px 5px -4px var(--_color);
     cursor: pointer;
-    transition: transform 0.2s;
+    text-decoration: none;
+    transition: transform var(--transition, 150ms ease);
   }
+
+  .button[data-color='secondary'] { --_color: var(--color, var(--surface-3)); color: var(--text-1); }
+  .button[data-color='white']     { --_color: var(--color, var(--surface-1)); color: var(--text-1); }
 
   .button:hover,
   .button:focus-visible {
-    transform: translate3d(0, -3px, 0);
+    transform: translateY(-2px);
   }
 
-  .button:focus-visible {
-    outline: var(--focus-size, 2px) solid var(--gray-500, #777);
+  .button:disabled,
+  .button[aria-disabled='true'] {
+    background-color: var(--gray-200);
+    border-color: var(--gray-300);
+    color: var(--gray-500);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none;
   }
 
   .outlined {
-    border-width: 1px;
-    border-style: solid;
-    border-color: var(--primary-2);
-    border-color: var(--color);
     background-color: transparent;
-    background: var(--white);
-    background: var(--color);
-    color: var(--primary-2);
+    border-color: var(--_color);
+    color: var(--_color);
+    box-shadow: none;
   }
+
   .minimal {
-    background-color: #eeeeee33;
-    background-color: unset;
-    background-color: var(--white);
-    background: unset;
-    background: var(--white);
-    color: var(--color);
-    border-width: 1px;
-    border-style: solid;
+    background-color: transparent;
+    border: none;
+    color: var(--_color);
+    box-shadow: none;
   }
-  .disabled {
-    background-color: #eeeeee33;
-    border: 1px solid #aaaaaaaa;
-    border: 1px solid var(--white-2);
-    border-width: 1px;
-    border-style: solid;
-    color: #888;
-    color: var(--black-3);
-    box-shadow: 0 0 0 0 transparent;
+
+  .fullwidth {
+    display: flex;
+    width: 100%;
+  }
+
+  .left-arrow::before {
+    content: '←';
   }
 </style>

@@ -104,10 +104,10 @@
   .string-array-label {
     display: block;
     font-weight: 500;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.95rem);
     margin-bottom: var(--size-1, 0.25rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .string-array {
@@ -118,15 +118,15 @@
     padding: var(--size-1, 0.3rem) var(--size-2, 0.5rem);
     border: var(--border-size-1, 1px) solid var(--gray-400, #999);
     border-radius: var(--radius-2, 4px);
-    background-color: var(--surface-1, var(--white, #fff));
+    background-color: var(--surface-1);
     min-height: 2.5rem;
     cursor: text;
     transition: border-color 0.15s;
   }
 
   .string-array:focus-within {
-    border-color: var(--accent, var(--primary, royalblue));
-    outline: var(--focus-size, 2px) solid var(--accent, var(--primary, royalblue));
+    border-color: var(--accent);
+    outline: var(--focus-size, 2px) solid var(--accent);
     outline-offset: var(--focus-offset, 1px);
   }
 
@@ -140,12 +140,12 @@
     align-items: center;
     gap: 0.15rem;
     padding: var(--size-1, 0.15rem) var(--size-2, 0.4rem);
-    background-color: var(--gray-100, var(--white-2, #f0f0f0));
+    background-color: var(--gray-100);
     border: var(--border-size-1, 1px) solid var(--gray-200, #ddd);
     border-radius: var(--radius-2, 4px);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-0, 0.85rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     line-height: 1.4;
     white-space: nowrap;
   }
@@ -163,7 +163,7 @@
   }
 
   .string-array-tag-remove:hover {
-    color: var(--red-7, var(--error, #d32f2f));
+    color: var(--error);
   }
 
   .string-array-input {
@@ -172,9 +172,9 @@
     border: none;
     outline: none;
     background: transparent;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.9rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     padding: var(--size-1, 0.2rem) 0;
   }
 

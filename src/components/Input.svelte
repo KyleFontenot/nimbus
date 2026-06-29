@@ -3,72 +3,42 @@
   import ConditionalWrapper from './ConditionalWrapper.svelte'
   import 'highlight.js/styles/github.css'
   import type { HLJSApi } from 'highlight.js'
-  import type { HTMLInputAttributes } from 'svelte/elements'
+  import type { HTMLInputAttributes, HTMLTextAreaAttributes } from 'svelte/elements'
 
-  type InputType =
-    | 'text'
-    | 'email'
-    | 'tel'
-    | 'password'
-    | 'textarea'
-    | 'number'
-    | 'checkbox'
-    | 'hidden'
+  type InputType = 'text' | 'email' | 'tel' | 'password' | 'number' | 'checkbox' | 'hidden' | 'textarea'
 
+  // Merging input + textarea attributes — textarea has a subset, the union covers both.
   interface Props extends HTMLInputAttributes {
     type?: InputType
     label?: string | null
-    incrementor?: boolean
     value?: string
     minimal?: boolean
-    dataVault?: string
-    initial?: string | number | undefined
-    onChange?: ((e: Event) => void) | undefined
-    onInput?: ((e: Event) => void) | undefined
-    onFocus?: ((e: Event) => void) | undefined
+    incrementor?: boolean
     flexibleHeight?: boolean
     monospace?: boolean
     code?: boolean
+    dataVault?: string
     children?: import('svelte').Snippet
   }
 
   let {
     type = 'text',
     label = null,
-    incrementor = false,
-    id = undefined,
-    placeholder = undefined,
-    style = undefined,
-    maxlength = undefined,
-    hidden = false,
     value = $bindable(''),
-    disabled = false,
-    name = null,
     minimal = false,
-    checked = false,
-    dataVault = '',
-    initial = $bindable(undefined),
-    onChange = undefined,
-    onInput = undefined,
-    onFocus = undefined,
+    incrementor = false,
     flexibleHeight = false,
     monospace = false,
     code = false,
-    required = false,
-    form = undefined,
+    dataVault = '',
+    class: className = '',
+    style = undefined,
     ...rest
   }: Props = $props()
 
-  if (!value && initial) {
-    value = initial.toString()
-  }
-  let checkedObj = {}
-  if (checked) {
-    Object.assign(checkedObj, { checked })
-  }
-
   let hljs: HLJSApi | undefined = $state()
   let codevalue: string = $state(value)
+  let el: HTMLElement | undefined = $state()
 
   async function loadHighlightJs(): Promise<void> {
     const h = await import('highlight.js/lib/core')
@@ -77,390 +47,159 @@
     hljs.registerLanguage('sql', syntax)
   }
 
-  if (code) {
-    loadHighlightJs()
-  }
+  if (code) loadHighlightJs()
+
   $effect(() => {
-    if (code) {
-      if (hljs) {
-        const highlighted = hljs.highlightAuto(value)
-        codevalue = highlighted.value
-      } else {
-        codevalue = value
-      }
+    if (code && hljs) {
+      codevalue = hljs.highlightAuto(value).value
+    } else if (code) {
+      codevalue = value
     }
   })
 
-  let el: HTMLElement = $state()
   function checkHeight(element: HTMLElement) {
     element.style.height = 'auto'
     element.style.height = `${element.scrollHeight + 5}px`
   }
+
   onMount(() => {
-    if (type === 'textarea') {
-      flexibleHeight && checkHeight(el)
-    }
-    if (initial) {
-      if (typeof initial === 'number') {
-        initial = initial.toString()
-      }
-      value = initial
-    }
+    if (type === 'textarea' && flexibleHeight && el) checkHeight(el)
   })
 </script>
+
+{#snippet field()}
+  {#if type === 'checkbox'}
+    <label class="checkmark-container" class:disabled={rest.disabled}>
+      <input
+        type="checkbox"
+        class="checkmark-input {className}"
+        data-vault={dataVault}
+        bind:checked={rest.checked}
+        {style}
+        {...rest}
+      />
+      <span class="checkmark"></span>
+    </label>
+  {:else if type === 'hidden'}
+    <input type="hidden" bind:value {style} {...rest} />
+  {:else if type === 'textarea'}
+    <ConditionalWrapper wrap={code} class="textarea-code-wrap">
+      <textarea
+        class="input {className}"
+        class:minimal
+        class:monospace
+        class:code
+        bind:value
+        bind:this={el}
+        spellcheck={code ? false : undefined}
+        oninput={e => {
+          if (flexibleHeight && e.target instanceof HTMLElement) checkHeight(e.target)
+        }}
+        {style}
+        {...rest}
+      ></textarea>
+      {#if code}
+        <pre><code
+          contenteditable="true"
+          spellcheck="false"
+          bind:innerHTML={codevalue}
+          oninput={e => (codevalue = (e.target as HTMLElement).innerHTML)}
+        >{@html codevalue}</code></pre>
+      {/if}
+    </ConditionalWrapper>
+  {:else}
+    <input
+      {type}
+      class="input {className}"
+      class:minimal
+      class:no-incrementor={!incrementor}
+      bind:value
+      data-vault={dataVault}
+      {style}
+      {...rest}
+    />
+  {/if}
+{/snippet}
 
 {#if label}
   <label class="label">
     {label}
-
-    {#if type === 'text'}
-      <input
-        class={`input ${rest.class}`}
-        {maxlength}
-        class:noincrementor={!incrementor}
-        class:minimal
-        class:hidden
-        {name}
-        type="text"
-        {id}
-        {checked}
-        {placeholder}
-        {style}
-        oninput={onInput}
-        onchange={onChange}
-        onfocus={onFocus}
-        readonly={disabled}
-        bind:value
-        data-vault={dataVault}
-      />
-    {:else if type === 'number'}
-      <input
-        class={`input ${rest.class}`}
-        {maxlength}
-        class:noincrementor={!incrementor}
-        class:minimal
-        class:hidden
-        {name}
-        type="number"
-        {id}
-        {checked}
-        {placeholder}
-        {style}
-        oninput={onInput}
-        onchange={onChange}
-        onfocus={onFocus}
-        readonly={disabled}
-        bind:value
-        data-vault={dataVault}
-      />
-    {:else if type === 'password'}
-      <input
-        class={`input ${rest.class}`}
-        {maxlength}
-        class:noincrementor={!incrementor}
-        class:minimal
-        class:hidden
-        {name}
-        type="password"
-        {id}
-        {checked}
-        {placeholder}
-        {style}
-        oninput={onInput}
-        onchange={onChange}
-        onfocus={onFocus}
-        readonly={disabled}
-        bind:value
-        data-vault={dataVault}
-      />
-    {:else if type === 'checkbox'}
-      <label class="checkmarkcontainer" class:disabled>
-        <input
-          class={`${rest.class}`}
-          {maxlength}
-          class:noincrementor={!incrementor}
-          class:hideDefault={true}
-          class:checkbox={true}
-          class:checkmarkinput={true}
-          class:minimal
-          class:hidden
-          {name}
-          type="checkbox"
-          {id}
-          {checked}
-          {placeholder}
-          {style}
-          oninput={onInput}
-          onchange={onChange}
-          readonly={disabled}
-          value={initial ?? value}
-          data-vault={dataVault}
-        />
-        <span class="checkmark"></span>
-      </label>
-    {:else if type === 'hidden'}
-      <input
-        class={`${rest.class}`}
-        class:hidden
-        {name}
-        type="hidden"
-        {id}
-        {style}
-        onchange={onChange}
-        bind:value
-      />
-    {:else if type === 'textarea'}
-      <ConditionalWrapper wrap={code} class="textareahighlightcodediv">
-        <textarea
-          class="input"
-          {name}
-          class:textarea={type === 'textarea'}
-          class:minimal
-          class:hidden
-          class:monospace
-          class:code
-          bind:value
-          spellcheck={code ? false : true}
-          bind:this={el}
-          {id}
-          oninput={e => {
-            flexibleHeight && e?.target instanceof HTMLElement && checkHeight(e.target)
-            if (onInput) {
-              onInput(e)
-            }
-            if (code) {
-            }
-          }}
-          {placeholder}
-          {style}
-        ></textarea>
-        {#if code}
-          <pre><code
-              contenteditable="true"
-              spellcheck="false"
-              bind:innerHTML={codevalue}
-              oninput={e => (codevalue = e.target.value)}>{@html codevalue}</code></pre>
-        {/if}
-      </ConditionalWrapper>
-    {/if}
+    {@render field()}
   </label>
-{:else if !label}
-  {#if type === 'text'}
-    <input
-      class={`input ${rest.class}`}
-      {maxlength}
-      class:noincrementor={!incrementor}
-      class:minimal
-      class:hidden
-      {name}
-      type="text"
-      {id}
-      {checked}
-      {placeholder}
-      {style}
-      oninput={onInput}
-      onchange={onChange}
-      onfocus={onFocus}
-      readonly={disabled}
-      bind:value
-      data-vault={dataVault}
-    />
-  {:else if type === 'hidden'}
-    <input
-      class={`${rest.class}`}
-      class:hidden
-      {name}
-      type="hidden"
-      {id}
-      {style}
-      onchange={onChange}
-      bind:value
-    />
-  {:else if type === 'number'}
-    <input
-      class={`input ${rest.class}`}
-      {maxlength}
-      class:noincrementor={!incrementor}
-      class:minimal
-      class:hidden
-      {name}
-      type="number"
-      {id}
-      {checked}
-      {placeholder}
-      {style}
-      oninput={onInput}
-      onchange={onChange}
-      onfocus={onFocus}
-      readonly={disabled}
-      bind:value
-      data-vault={dataVault}
-    />
-  {:else if type === 'password'}
-    <input
-      class={`input ${rest.class}`}
-      {maxlength}
-      class:noincrementor={!incrementor}
-      class:minimal
-      class:hidden
-      {name}
-      type="password"
-      {id}
-      {checked}
-      {placeholder}
-      {style}
-      oninput={onInput}
-      onchange={onChange}
-      onfocus={onFocus}
-      readonly={disabled}
-      bind:value
-      data-vault={dataVault}
-    />
-  {:else if type === 'checkbox'}
-    <label class="checkmarkcontainer" class:disabled>
-      <input
-        class={`${rest.class}`}
-        {maxlength}
-        class:noincrementor={!incrementor}
-        class:hideDefault={true}
-        class:checkbox={true}
-        class:checkmarkinput={true}
-        class:minimal
-        class:hidden
-        {name}
-        type="checkbox"
-        {id}
-        {checked}
-        {placeholder}
-        {style}
-        oninput={onInput}
-        onchange={onChange}
-        readonly={disabled}
-        value={initial ?? value}
-        data-vault={dataVault}
-      />
-      <span class="checkmark"></span>
-    </label>
-  {:else if type === 'textarea'}
-    <ConditionalWrapper wrap={code} class="codediv">
-      <textarea
-        class="input"
-        {name}
-        class:textarea={type === 'textarea'}
-        class:minimal
-        class:hidden
-        class:monospace
-        class:code
-        spellcheck={code ? false : true}
-        bind:this={el}
-        bind:value
-        {id}
-        oninput={e => {
-          flexibleHeight && e?.target instanceof HTMLElement && checkHeight(e.target)
-          if (onInput) {
-            onInput(e)
-          }
-        }}
-        {placeholder}
-        {style}
-      ></textarea>
-      {#if code}
-        <pre><code
-            spellcheck="false"
-            contenteditable="true"
-            oninput={e => (codevalue = e.target.value)}>{@html codevalue}</code></pre>
-      {/if}
-    </ConditionalWrapper>
-  {/if}
+{:else}
+  {@render field()}
 {/if}
-
-<!-- {#if type === 'checkbox'}
-
-{/if} -->
 
 <style>
   .input {
     padding: 8px;
-    outline: 1px solid var(--primary);
-    border-radius: 4px;
-    background: var(--surface-1, var(--white, #fff));
-    display: inline-block;
+    outline: 1px solid var(--accent);
+    border-radius: var(--radius-2, 4px);
+    background: var(--surface-1, #fff);
     display: block;
     width: 100%;
     border: 1px solid transparent;
+    font-family: var(--font-sans);
   }
+
   .input::placeholder {
-    color: var(--gray-400, #aaa);
+    color: var(--gray-400);
   }
-  .input.checkbox {
-    outline: none;
+
+  .input:disabled {
+    background: var(--surface-2);
+    color: var(--gray-500);
+    cursor: not-allowed;
   }
-  .textarea {
-    width: 80%;
-    height: 4rem;
+
+  .minimal {
+    outline: 1px solid var(--gray-300);
+  }
+
+  .no-incrementor::-webkit-outer-spin-button,
+  .no-incrementor::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='number'].no-incrementor {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  .label {
+    display: inline-block;
+    font-size: 100%;
+    font-weight: 400;
+    font-family: var(--font-sans);
+    line-height: 1.6rem;
+    position: relative;
+  }
+
+  /* ── Textarea ── */
+  .input:is(textarea) {
     display: block;
     width: 100%;
     height: auto;
     resize: none;
     line-height: 1.2rem;
-    font-family: var(--font1);
-  }
-  .textarea.monospace {
-    font-family: monospace;
-  }
-  .minimal {
-    outline: 1px solid var(--gray-300, #cccccc99);
-  }
-  .minimal.checkbox {
-    outline: none;
-  }
-  input.checkbox {
-    width: unset;
-  }
-  input.noincrementor::-webkit-outer-spin-button,
-  input.noincrementor::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  input[type='number'].noincrementor {
-    appearance: textfield;
-    -moz-appearance: textfield;
-  }
-  .label {
-    display: inline-block;
-    font-size: 100%;
-    font-weight: 400;
-    font-family: var(--font2);
-    line-height: 1.6rem;
-    position: relative;
-  }
-  .hidden {
-    display: none;
-    visibility: hidden;
-    width: 0;
-    height: 0;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
   }
 
-  .checkmarkcontainer {
+  .monospace {
+    font-family: var(--font-mono);
+  }
+
+  /* ── Checkbox ── */
+  .checkmark-container {
     display: inline-block;
     position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
+    padding-left: 2rem;
+    margin-bottom: 0.75rem;
     cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
 
-  /* Hide the browser's default checkbox */
-  .checkmarkinput {
+  .checkmark-input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -468,43 +207,30 @@
     width: 0;
   }
 
-  /* Create a custom checkbox */
   .checkmark {
     position: absolute;
     top: 0;
     left: 0;
     height: 1.3rem;
     width: 1.3rem;
-    background-color: var(--gray-50, #f9f9f9);
-    border: 1px solid var(--primary);
+    background-color: var(--surface-2, #f9f9f9);
+    border: 1px solid var(--accent);
     border-radius: var(--radius-2, 5px);
-    transition: background-color 0.1s;
+    transition: background-color var(--transition, 150ms ease);
   }
 
-  /* On mouse-over, add a grey background color */
-  .checkmarkcontainer:hover input ~ .checkmark {
-    background-color: #ccc;
+  .checkmark-container:hover .checkmark-input:not(:disabled) ~ .checkmark {
+    background-color: var(--gray-200);
   }
 
-  /* When the checkbox is checked, add a blue background */
-  .checkmarkcontainer input:checked ~ .checkmark {
-    background-color: var(--primary);
+  .checkmark-container .checkmark-input:checked ~ .checkmark {
+    background-color: var(--accent);
   }
 
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark:after {
+  .checkmark::after {
     content: '';
     position: absolute;
     display: none;
-  }
-
-  /* Show the checkmark when checked */
-  .checkmarkcontainer input:checked ~ .checkmark:after {
-    display: block;
-  }
-
-  /* Style the checkmark/indicator */
-  .checkmarkcontainer .checkmark:after {
     left: 6px;
     top: 1px;
     width: 8px;
@@ -514,21 +240,29 @@
     transform: rotate(35deg);
   }
 
-  .checkmarkcontainer.disabled:hover input ~ .checkmark {
-    background-color: #f9f9f9;
-  }
-  .checkmarkcontainer.disabled input:checked ~ .checkmark {
-    background-color: #bbb;
-  }
-  .checkmarkcontainer.disabled > .checkmark {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+  .checkmark-container .checkmark-input:checked ~ .checkmark::after {
+    display: block;
   }
 
-  :global(.textareahighlightcodediv) {
+  .checkmark-container.disabled {
+    cursor: not-allowed;
+  }
+
+  .checkmark-container.disabled .checkmark {
+    background-color: var(--surface-2);
+    border-color: var(--gray-300);
+  }
+
+  .checkmark-container.disabled .checkmark-input:checked ~ .checkmark {
+    background-color: var(--gray-400);
+  }
+
+  /* ── Code textarea overlay ── */
+  :global(.textarea-code-wrap) {
     position: relative;
   }
-  :global(.textareahighlightcodediv) pre {
+
+  :global(.textarea-code-wrap) pre {
     position: absolute;
     top: 0;
     left: 0;
@@ -538,22 +272,26 @@
     width: 100%;
     z-index: 9;
     cursor: text;
+    pointer-events: none;
   }
-  :global(.textareahighlightcodediv) pre code {
-    top: 0;
+
+  :global(.textarea-code-wrap) pre code {
     position: relative;
-    margin-inline: unset;
     font-size: inherit;
     padding: 0;
     margin: 0;
+    pointer-events: auto;
   }
-  :global(.textareahighlightcodediv) pre,
-  :global(.textareahighlightcodediv) textarea {
-    font-family: monospace;
+
+  :global(.textarea-code-wrap) pre,
+  :global(.textarea-code-wrap) textarea {
+    font-family: var(--font-mono);
     font-size: 0.9rem;
     line-height: 1.2rem;
   }
-  :global(.textareahighlightcodediv) textarea {
+
+  :global(.textarea-code-wrap) textarea {
     color: transparent;
+    caret-color: var(--text-1);
   }
 </style>

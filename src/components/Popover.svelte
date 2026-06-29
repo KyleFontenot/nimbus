@@ -121,8 +121,8 @@
   .popover-content {
     position: absolute;
     z-index: var(--layer-4, 100);
-    background-color: var(--surface-1, var(--white, #fff));
-    color: var(--text-1, var(--fore, currentColor));
+    background-color: var(--surface-1);
+    color: var(--text-1);
     border: var(--border-size-1, 1px) solid var(--gray-200, #e0e0e0);
     border-radius: var(--radius-3, 8px);
     padding: var(--size-3, 0.75rem);

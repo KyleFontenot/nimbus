@@ -124,7 +124,7 @@
     justify-content: center;
     background-color: var(--gray-100, #f0f0f0);
     color: var(--gray-500, #999);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-0, 0.8rem);
   }
 

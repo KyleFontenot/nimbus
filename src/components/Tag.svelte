@@ -95,7 +95,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--size-1, 0.25rem);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-weight: 500;
     line-height: 1;
     white-space: nowrap;
@@ -116,7 +116,7 @@
 
   a.tag:focus-visible,
   .tag:focus-visible {
-    outline: var(--focus-size, 2px) solid var(--accent, var(--primary, royalblue));
+    outline: var(--focus-size, 2px) solid var(--accent);
     outline-offset: 1px;
   }
 
@@ -133,28 +133,28 @@
   /* Variants */
   .default {
     background-color: var(--gray-100, #f0f0f0);
-    color: var(--gray-700, var(--black-2, #444));
+    color: var(--gray-700);
     border-color: var(--gray-200, #e0e0e0);
   }
   .primary {
-    background-color: var(--blue-1, var(--primary-4, #e3f2fd));
-    color: var(--blue-9, var(--primary, #1565c0));
-    border-color: var(--blue-3, #90caf9);
+    background-color: var(--info-bg);
+    color: var(--info);
+    border-color: var(--info-border);
   }
   .success {
-    background-color: var(--green-1, var(--secondary-3, #e8f5e9));
-    color: var(--green-9, var(--secondary, #2e7d32));
-    border-color: var(--green-3, var(--secondary, #a5d6a7));
+    background-color: var(--success-bg);
+    color: var(--success);
+    border-color: var(--success-border);
   }
   .warning {
-    background-color: var(--yellow-1, #fff8e1);
-    color: var(--yellow-9, #f57f17);
-    border-color: var(--yellow-3, #ffe082);
+    background-color: var(--warning-bg);
+    color: var(--warning);
+    border-color: var(--warning-border);
   }
   .error {
-    background-color: var(--red-1, var(--secondary2, #ffebee));
-    color: var(--red-9, var(--error, #c62828));
-    border-color: var(--red-3, #ef9a9a);
+    background-color: var(--error-bg);
+    color: var(--error);
+    border-color: var(--error-border);
   }
 
   .tag-content {
@@ -183,7 +183,7 @@
   }
 
   .remove-btn:focus-visible {
-    outline: var(--focus-size, 2px) solid var(--accent, var(--primary, royalblue));
+    outline: var(--focus-size, 2px) solid var(--accent);
     opacity: 1;
   }
 </style>

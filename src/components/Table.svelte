@@ -61,10 +61,10 @@
     margin-inline: auto;
     border-collapse: separate;
     border-spacing: 0;
-    background-color: var(--surface-1, var(--white, #fff));
+    background-color: var(--surface-1);
     border-radius: var(--radius-3, 8px);
     overflow: hidden;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.9rem);
   }
 
@@ -80,9 +80,9 @@
     padding: var(--size-3, 0.75rem) var(--size-3, 0.75rem);
     text-align: left;
     vertical-align: middle;
-    background-color: var(--surface-2, var(--white-2, #f9f9f9));
+    background-color: var(--surface-2);
     border-bottom: var(--border-size-2, 2px) solid var(--gray-200, #e0e0e0);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   /* Body */
@@ -90,7 +90,7 @@
     padding: var(--size-2, 0.5rem) var(--size-3, 0.75rem);
     vertical-align: middle;
     border-bottom: var(--border-size-1, 1px) solid var(--gray-100, #f0f0f0);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .table :global(tbody tr:last-child td) {
@@ -99,7 +99,7 @@
 
   /* Alternating / striped rows */
   .table.alternatingrows :global(tbody tr:nth-child(even)) {
-    background-color: var(--surface-2, var(--white-2, #f9f9f9));
+    background-color: var(--surface-2);
   }
 
   /* Hoverable rows */
@@ -120,7 +120,7 @@
 
   /* HR sections */
   .table.hrsections :global(tr > th:first-of-type) {
-    border-left: 3px solid var(--accent, var(--primary, royalblue));
+    border-left: 3px solid var(--accent);
   }
 
   /* Spreadsheet mode */

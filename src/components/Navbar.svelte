@@ -109,8 +109,8 @@
     --_navbar-bg: var(--navbar-bg, var(--surface-1, #fff));
     --_navbar-color: var(--navbar-color, var(--text-1, #1a1a1a));
     --_navbar-link-color: var(--navbar-link-color, var(--text-2, #444));
-    --_navbar-link-hover: var(--navbar-link-hover, var(--accent, var(--primary, royalblue)));
-    --_navbar-active-color: var(--navbar-active-color, var(--accent, var(--primary, royalblue)));
+    --_navbar-link-hover: var(--navbar-link-hover, var(--accent));
+    --_navbar-active-color: var(--navbar-active-color, var(--accent));
     --_navbar-height: var(--navbar-height, 3.5rem);
     --_navbar-padding-x: var(--navbar-padding-x, var(--size-3, 1rem));
     --_navbar-border: var(--navbar-border, var(--gray-200, #e0e0e0));
@@ -124,7 +124,7 @@
     border-bottom: 1px solid var(--_navbar-border);
     box-shadow: var(--_navbar-shadow);
     z-index: var(--_navbar-z);
-    font-family: var(--font-sans, var(--font2, system-ui, sans-serif));
+    font-family: var(--font-sans);
   }
 
   .navbar.sticky {

@@ -25,6 +25,8 @@
   --accent-s: 100%;
   --accent-l: 42.9%;
   --accent: hsl(var(--accent-h), var(--accent-s), var(--accent-l));
+  --accent-bg: hsl(var(--accent-h), var(--accent-s), 94%);
+  --accent-border: hsl(var(--accent-h), var(--accent-s), 70%);
 
   --light: #fefefe;
   --dark: #222222;
@@ -35,6 +37,29 @@
   --error-s: 94.5%;
   --error-l: 43.1%;
   --error: hsl(var(--error-h), var(--error-s), var(--error-l));
+  --error-bg: hsl(var(--error-h), var(--error-s), 96%);
+  --error-border: hsl(var(--error-h), var(--error-s), 72%);
+
+  --success-h: 122;
+  --success-s: 39%;
+  --success-l: 35%;
+  --success: hsl(var(--success-h), var(--success-s), var(--success-l));
+  --success-bg: hsl(var(--success-h), var(--success-s), 95%);
+  --success-border: hsl(var(--success-h), var(--success-s), 68%);
+
+  --warning-h: 38;
+  --warning-s: 92%;
+  --warning-l: 40%;
+  --warning: hsl(var(--warning-h), var(--warning-s), var(--warning-l));
+  --warning-bg: hsl(var(--warning-h), var(--warning-s), 95%);
+  --warning-border: hsl(var(--warning-h), var(--warning-s), 72%);
+
+  --info-h: 207;
+  --info-s: 90%;
+  --info-l: 40%;
+  --info: hsl(var(--info-h), var(--info-s), var(--info-l));
+  --info-bg: hsl(var(--info-h), var(--info-s), 94%);
+  --info-border: hsl(var(--info-h), var(--info-s), 70%);
 
   /* ── Gray Scale ── */
   --gray-0: #fefefe;
@@ -95,6 +120,7 @@
   --border-size-1: 1px;
   --border-size-2: 2px;
   --border-size-3: 3px;
+  --border: var(--border-size-1) solid var(--gray-200);
 
   /* ── Radii ── */
   --radius-1: 3px;
@@ -125,6 +151,8 @@
   --focus-l: 30%;
 
   /* ── Transitions ── */
+  --transition: 150ms ease;
+  --transition-slow: 300ms ease;
   --ease-1: cubic-bezier(0.25, 0, 0.5, 1);
   --ease-2: cubic-bezier(0.25, 0, 0.4, 1);
   --ease-out-1: cubic-bezier(0, 0, 0.58, 1);
@@ -143,7 +171,15 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --accent-l: 62%;
+    --accent-bg: hsl(var(--accent-h), var(--accent-s), 15%);
     --error-l: 62%;
+    --error-bg: hsl(var(--error-h), var(--error-s), 14%);
+    --success-l: 55%;
+    --success-bg: hsl(var(--success-h), var(--success-s), 14%);
+    --warning-l: 60%;
+    --warning-bg: hsl(var(--warning-h), var(--warning-s), 14%);
+    --info-l: 60%;
+    --info-bg: hsl(var(--info-h), var(--info-s), 14%);
     --focus-l: -30%;
     --fore: var(--light);
     --back: var(--dark);

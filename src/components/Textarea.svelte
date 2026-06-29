@@ -78,10 +78,10 @@
   .textarea-label {
     display: block;
     font-weight: var(--font-weight-5, 500);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.95rem);
     margin-bottom: var(--size-1, 0.25rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .textarea {
@@ -90,8 +90,8 @@
     padding: var(--size-2, 0.5rem) var(--size-3, 0.75rem);
     border: var(--border-size-1, 1px) solid var(--gray-400, #999);
     border-radius: var(--radius-2, 6px);
-    background-color: var(--surface-1, var(--white, #fff));
-    color: var(--text-1, var(--fore, currentColor));
+    background-color: var(--surface-1);
+    color: var(--text-1);
     font-family: inherit;
     font-size: var(--font-size-1, 0.95rem);
     line-height: var(--font-lineheight-3, 1.55);
@@ -119,7 +119,7 @@
 
   .textarea-count {
     text-align: right;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-00, 0.7rem);
     color: var(--gray-400, #aaa);
     margin-top: var(--size-1, 0.2rem);

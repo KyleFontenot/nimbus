@@ -65,8 +65,8 @@
     border: var(--border-size-1, 1px) solid var(--gray-200, #e0e0e0);
     border-radius: var(--radius-3, 8px);
     padding: var(--size-5, 1.25rem);
-    background-color: var(--surface-1, var(--white, #fff));
-    color: var(--text-1, var(--fore, currentColor));
+    background-color: var(--surface-1);
+    color: var(--text-1);
     box-shadow: var(--shadow-4, 0 8px 30px -5px rgba(0, 0, 0, 0.25));
     max-width: min(90vw, 40rem);
     width: 100%;
@@ -108,7 +108,7 @@
   }
 
   .dialog-close:hover {
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     background-color: var(--gray-100, #f0f0f0);
   }
 

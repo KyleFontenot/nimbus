@@ -80,7 +80,7 @@
   .dateinput-label {
     display: inline-block;
     font-weight: 400;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     line-height: var(--font-lineheight-3, 1.6);
   }
 
@@ -88,8 +88,8 @@
     padding: var(--size-2, 0.5rem) var(--size-3, 0.75rem);
     border: var(--border-size-1, 1px) solid var(--gray-400, #999);
     border-radius: var(--radius-2, 4px);
-    background-color: var(--surface-1, var(--white, #fff));
-    color: var(--text-1, var(--fore, currentColor));
+    background-color: var(--surface-1);
+    color: var(--text-1);
     font-family: inherit;
     font-size: var(--font-size-1, 1rem);
     line-height: var(--font-lineheight-3, 1.6);

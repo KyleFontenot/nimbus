@@ -58,9 +58,9 @@
     justify-content: space-between;
     align-items: baseline;
     margin-bottom: var(--size-1, 0.25rem);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.9rem);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .range-label-value {
@@ -76,8 +76,8 @@
     appearance: none;
     background: linear-gradient(
       to right,
-      var(--accent, var(--primary, royalblue)) 0%,
-      var(--accent, var(--primary, royalblue)) var(--range-percent, 50%),
+      var(--accent) 0%,
+      var(--accent) var(--range-percent, 50%),
       var(--gray-200, #e0e0e0) var(--range-percent, 50%),
       var(--gray-200, #e0e0e0) 100%
     );
@@ -96,9 +96,9 @@
     appearance: none;
     width: 1.2rem;
     height: 1.2rem;
-    background-color: var(--accent, var(--primary, royalblue));
+    background-color: var(--accent);
     border-radius: var(--radius-round, 50%);
-    border: 2px solid var(--surface-1, var(--white, #fff));
+    border: 2px solid var(--surface-1);
     box-shadow: var(--shadow-2, 0 1px 3px rgba(0, 0, 0, 0.25));
     cursor: pointer;
   }
@@ -106,9 +106,9 @@
   .range::-moz-range-thumb {
     width: 1.2rem;
     height: 1.2rem;
-    background-color: var(--accent, var(--primary, royalblue));
+    background-color: var(--accent);
     border-radius: var(--radius-round, 50%);
-    border: 2px solid var(--surface-1, var(--white, #fff));
+    border: 2px solid var(--surface-1);
     box-shadow: var(--shadow-2, 0 1px 3px rgba(0, 0, 0, 0.25));
     cursor: pointer;
   }

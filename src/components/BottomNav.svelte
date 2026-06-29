@@ -82,7 +82,7 @@
     min-height: 3.25rem;
     text-decoration: none;
     color: var(--gray-500, #888);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-00, 0.7rem);
     font-weight: 500;
     position: relative;
@@ -98,7 +98,7 @@
     left: 50%;
     width: 0;
     height: 2px;
-    background: var(--accent, var(--primary, royalblue));
+    background: var(--accent);
     border-radius: 0 0 var(--radius-2, 4px) var(--radius-2, 4px);
     transition: width 0.2s ease, left 0.2s ease;
   }
@@ -109,11 +109,11 @@
   }
 
   .bottom-nav-item:hover:not(.active) {
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .bottom-nav-item.active {
-    color: var(--accent, var(--primary, royalblue));
+    color: var(--accent);
   }
 
   .bottom-nav-item:focus-visible {

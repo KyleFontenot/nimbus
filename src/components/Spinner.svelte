@@ -30,7 +30,7 @@
     border-radius: var(--radius-round, 50%);
     border-style: solid;
     border-color: var(--gray-200, #e0e0e0);
-    border-top-color: var(--accent, var(--primary, royalblue));
+    border-top-color: var(--accent);
     animation: spin 0.7s linear infinite;
   }
 

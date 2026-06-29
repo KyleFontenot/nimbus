@@ -110,13 +110,13 @@
     width: clamp(16rem, 50vw, 40rem);
     padding: var(--size-3, 0.75rem) var(--size-4, 1rem);
     border-radius: var(--radius-2, 8px);
-    color: var(--text-1, var(--black, #222));
+    color: var(--text-1);
     z-index: var(--layer-5, 200);
     box-shadow: var(--shadow-4, 0 6px 20px -4px rgba(0, 0, 0, 0.3));
     display: flex;
     align-items: center;
     gap: var(--size-3, 0.75rem);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.95rem);
   }
 
@@ -125,20 +125,20 @@
   }
 
   .info {
-    background-color: var(--gray-100, var(--white-3, #f0f0f0));
-    border: var(--border-size-1, 1px) solid var(--gray-200, var(--white-4, #ddd));
+    background-color: var(--gray-100);
+    border: var(--border-size-1, 1px) solid var(--gray-200);
   }
 
   .success {
-    background-color: var(--green-1, var(--tertiary4, #e8f5e9));
-    border: var(--border-size-1, 1px) solid var(--green-3, var(--tertiary2, #a5d6a7));
-    color: var(--green-9, var(--tertiary, #2e7d32));
+    background-color: var(--success-bg);
+    border: var(--border-size-1, 1px) solid var(--success-border);
+    color: var(--success);
   }
 
   .error {
-    background-color: var(--red-1, var(--secondary2, #ffebee));
-    border: var(--border-size-1, 1px) solid var(--red-3, var(--secondary, #ef9a9a));
-    color: var(--red-9, var(--secondary, #c62828));
+    background-color: var(--error-bg);
+    border: var(--border-size-1, 1px) solid var(--error-border);
+    color: var(--error);
   }
 
   .toast-links {

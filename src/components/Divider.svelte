@@ -87,7 +87,7 @@
   .divider-label {
     font-size: var(--font-size-0, 0.8rem);
     color: var(--gray-500, #888);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     white-space: nowrap;
   }
 </style>

@@ -66,10 +66,10 @@
   .large { width: 4.5rem; height: 4.5rem; font-size: var(--font-size-3, 1.35rem); }
 
   .placeholder {
-    background-color: var(--gray-300, var(--primary-4, #ccc));
-    color: var(--gray-700, var(--black-2, #444));
+    background-color: var(--gray-300);
+    color: var(--gray-700);
     font-weight: 600;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     text-transform: uppercase;
   }
 </style>

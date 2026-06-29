@@ -498,8 +498,8 @@
     flex-direction: column;
     border: var(--border-size-1, 1px) solid var(--gray-300, #ccc);
     border-radius: var(--radius-2, 6px);
-    background-color: var(--surface-1, var(--white, #fff));
-    color: var(--text-1, var(--fore, currentColor));
+    background-color: var(--surface-1);
+    color: var(--text-1);
     overflow: hidden;
     min-height: var(--md-min-height, 20rem);
   }
@@ -527,7 +527,7 @@
     gap: var(--size-1, 0.2rem);
     padding: var(--size-1, 0.3rem) var(--size-2, 0.5rem);
     border-bottom: var(--border-size-1, 1px) solid var(--gray-200, #e0e0e0);
-    background-color: var(--gray-50, var(--white-2, #fafafa));
+    background-color: var(--gray-50);
     min-height: 2.5rem;
   }
 
@@ -562,9 +562,9 @@
     border: none;
     border-radius: var(--radius-1, 3px);
     background: none;
-    color: var(--gray-600, var(--black-3, #555));
+    color: var(--gray-600);
     cursor: pointer;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-0, 0.8rem);
     line-height: 1;
     transition: background-color 0.1s, color 0.1s;
@@ -572,17 +572,17 @@
 
   .md-btn:hover:not(:disabled) {
     background-color: var(--gray-100, #eee);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .md-btn:focus-visible {
-    outline: var(--focus-size, 2px) solid var(--accent, var(--primary, royalblue));
+    outline: var(--focus-size, 2px) solid var(--accent);
     outline-offset: -1px;
   }
 
   .md-btn-active {
     background-color: var(--gray-200, #ddd);
-    color: var(--accent, var(--primary, royalblue));
+    color: var(--accent);
   }
 
   .md-icon {
@@ -632,7 +632,7 @@
     font-family: var(--font-mono, 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace);
     font-size: var(--font-size-1, 0.9rem);
     line-height: var(--font-lineheight-4, 1.7);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     background: transparent;
     tab-size: 2;
   }
@@ -650,10 +650,10 @@
 
   .md-preview-content {
     padding: var(--size-3, 0.75rem) var(--size-4, 1rem);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.95rem);
     line-height: var(--font-lineheight-4, 1.7);
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
@@ -701,9 +701,9 @@
   .md-preview-content :global(blockquote) {
     margin: 0 0 var(--size-3, 1rem);
     padding: var(--size-2, 0.5rem) var(--size-4, 1rem);
-    border-left: 4px solid var(--gray-300, var(--primary-4, #ccc));
-    background-color: var(--gray-50, var(--white-2, #fafafa));
-    color: var(--gray-700, var(--black-2, #444));
+    border-left: 4px solid var(--gray-300);
+    background-color: var(--gray-50);
+    color: var(--gray-700);
   }
   .md-preview-content :global(blockquote p:last-child) {
     margin-bottom: 0;
@@ -752,7 +752,7 @@
     margin: var(--size-4, 1.5rem) 0;
   }
   .md-preview-content :global(a) {
-    color: var(--accent, var(--primary, royalblue));
+    color: var(--accent);
     text-decoration: underline;
   }
   .md-preview-content :global(img) {
@@ -781,12 +781,12 @@
     justify-content: space-between;
     padding: var(--size-1, 0.25rem) var(--size-3, 0.75rem);
     border-top: var(--border-size-1, 1px) solid var(--gray-200, #e0e0e0);
-    background-color: var(--gray-50, var(--white-2, #fafafa));
+    background-color: var(--gray-50);
     min-height: 1.75rem;
   }
 
   .md-stats {
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-00, 0.7rem);
     color: var(--gray-400, #aaa);
     margin-inline-start: auto;

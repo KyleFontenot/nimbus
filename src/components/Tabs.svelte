@@ -74,7 +74,7 @@
     border-bottom: 2px solid transparent;
     margin-bottom: -2px;
     cursor: pointer;
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     font-size: var(--font-size-1, 0.95rem);
     font-weight: 500;
     color: var(--gray-500, #888);
@@ -83,12 +83,12 @@
   }
 
   .tabs-trigger:hover:not(:disabled) {
-    color: var(--text-1, var(--fore, currentColor));
+    color: var(--text-1);
   }
 
   .tabs-trigger.active {
-    color: var(--accent, var(--primary, royalblue));
-    border-bottom-color: var(--accent, var(--primary, royalblue));
+    color: var(--accent);
+    border-bottom-color: var(--accent);
   }
 
   .tabs-trigger:disabled {

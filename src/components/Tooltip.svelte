@@ -37,7 +37,7 @@
     background-color: var(--gray-900, var(--dark, #222));
     color: var(--gray-0, var(--light, #fefefe));
     font-size: var(--font-size-0, 0.8rem);
-    font-family: var(--font-sans, var(--font2, sans-serif));
+    font-family: var(--font-sans);
     line-height: var(--font-lineheight-1, 1.3);
     border-radius: var(--radius-2, 4px);
     white-space: nowrap;
