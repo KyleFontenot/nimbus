@@ -2,7 +2,6 @@ import isJsonString from "./isJson";
 import { writable } from "svelte/store";
 import type { Readable, Subscriber, Unsubscriber } from "svelte/store";
 import { onMount } from "svelte";
-import { page } from "@sveltejs/kit";
 
 export interface WSSocketStoreOptions {
 	onConnect?: (() => void) | (() => string);
@@ -22,7 +21,7 @@ export interface WebSocketStore<T> extends Readable<T> {
 	send: (msg: string | JSON | Record<string, unknown>) => void;
 }
 
-export let WSADDRESS: undefined | string = page.url.origin;
+export let WSADDRESS: undefined | string;
 
 // Client-side only!
 function websocketStore<T>(
