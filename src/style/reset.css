@@ -190,7 +190,7 @@ Remove all the styles of the "User-Agent-Stylesheet", except for the 'display' p
 */
 
 *:where(:not(html, iframe, canvas, img, svg, video):not(svg *, symbol *)) {
-	// all: unset;
+	/* all: unset; */
 	display: revert;
 }
 /* Preferred box-sizing value */
