@@ -40,7 +40,7 @@ function websocketStore<T>(
 	let retryCounter = 0;
 	let retryInterval: undefined | ReturnType<typeof setInterval>;
 	// let user = useridentifier || new Date().toISOString();
-	const newStore = writable(defaultValue);
+	const newStore = writable<any>(defaultValue);
 	const { subscribe: _subscribe, set: _set, update: _update } = newStore;
 	const MAXCOUNTER = 8;
 	let url = setUrl;
@@ -89,7 +89,7 @@ function websocketStore<T>(
 							break;
 						}
 						case "join": {
-							_update((prev: T) => {
+							_update((prev) => {
 								prev.users = message.message;
 								return prev;
 							});
@@ -159,7 +159,7 @@ function websocketStore<T>(
 	};
 }
 
-const waitForOpenConnection = (socket) => {
+const waitForOpenConnection = (socket: WebSocket | undefined) => {
 	return new Promise<void>((resolve, reject) => {
 		const maxNumberOfAttempts = 10;
 		const intervalTime = 30; //ms
@@ -169,7 +169,7 @@ const waitForOpenConnection = (socket) => {
 			if (currentAttempt > maxNumberOfAttempts - 1) {
 				clearInterval(interval);
 				reject(new Error("Maximum number of attempts exceeded"));
-			} else if (socket.readyState === socket.OPEN) {
+			} else if (socket && socket.readyState === socket.OPEN) {
 				clearInterval(interval);
 				resolve();
 			}

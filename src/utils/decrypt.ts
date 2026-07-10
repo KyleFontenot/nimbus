@@ -15,7 +15,13 @@ type KeyPair = {
 	d: number;
 };
 
-export function generateKeyPair(): { publicKey: KeyPair; privateKey: KeyPair } {
+type PublicKey = Pick<KeyPair, "n" | "e">;
+type PrivateKey = Pick<KeyPair, "n" | "d">;
+
+export function generateKeyPair(): {
+	publicKey: PublicKey;
+	privateKey: PrivateKey;
+} {
 	function generatePrime(min: number, max: number) {
 		const isPrime = (num: number) => {
 			if (num <= 1) return false;
@@ -30,13 +36,13 @@ export function generateKeyPair(): { publicKey: KeyPair; privateKey: KeyPair } {
 		}
 		throw new Error("No prime found in range");
 	}
-	function findPublicExponent(phi) {
+	function findPublicExponent(phi: number) {
 		for (let e = 3; e < phi; e += 2) {
 			if (gcd(e, phi) === 1) return e;
 		}
 		throw new Error("Could not find public exponent");
 	}
-	function computePrivateExponent(e, phi) {
+	function computePrivateExponent(e: number, phi: number) {
 		let d = 1;
 		while (true) {
 			if ((d * e) % phi === 1) return d;
@@ -70,7 +76,7 @@ function gcd(a: number, b: number) {
 	return a;
 }
 
-const decrypt = (encryptedMessage: string, privateKey: KeyPair): string =>
+const decrypt = (encryptedMessage: string, privateKey: PrivateKey): string =>
 	encryptedMessage
 		.split(",")
 		.map((num) => {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props extends HTMLAttributes<HTMLElement> {
+  interface Props extends Omit<HTMLAttributes<HTMLElement>, 'onchange'> {
     page?: number
     total: number
     perPage?: number

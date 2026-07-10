@@ -3,9 +3,17 @@
   import ConditionalWrapper from './ConditionalWrapper.svelte'
   import 'highlight.js/styles/github.css'
   import type { HLJSApi } from 'highlight.js'
-  import type { HTMLInputAttributes, HTMLTextAreaAttributes } from 'svelte/elements'
+  import type { HTMLInputAttributes, HTMLTextareaAttributes } from 'svelte/elements'
 
-  type InputType = 'text' | 'email' | 'tel' | 'password' | 'number' | 'checkbox' | 'hidden' | 'textarea'
+  type InputType =
+    | 'text'
+    | 'email'
+    | 'tel'
+    | 'password'
+    | 'number'
+    | 'checkbox'
+    | 'hidden'
+    | 'textarea'
 
   // Merging input + textarea attributes — textarea has a subset, the union covers both.
   interface Props extends HTMLInputAttributes {
@@ -18,6 +26,7 @@
     monospace?: boolean
     code?: boolean
     dataVault?: string
+    disabled?: boolean
     children?: import('svelte').Snippet
   }
 
@@ -33,6 +42,8 @@
     dataVault = '',
     class: className = '',
     style = undefined,
+    disabled = $bindable(false),
+    checked = $bindable(false),
     ...rest
   }: Props = $props()
 
@@ -44,7 +55,7 @@
     const h = await import('highlight.js/lib/core')
     hljs = h.default
     const syntax = await import('highlight.js/lib/languages/sql')
-    hljs.registerLanguage('sql', syntax)
+    hljs.registerLanguage('sql', syntax.default)
   }
 
   if (code) loadHighlightJs()
@@ -69,12 +80,12 @@
 
 {#snippet field()}
   {#if type === 'checkbox'}
-    <label class="checkmark-container" class:disabled={rest.disabled}>
+    <label class="checkmark-container" class:disabled>
       <input
         type="checkbox"
         class="checkmark-input {className}"
         data-vault={dataVault}
-        bind:checked={rest.checked}
+        bind:checked
         {style}
         {...rest}
       />
@@ -96,15 +107,15 @@
           if (flexibleHeight && e.target instanceof HTMLElement) checkHeight(e.target)
         }}
         {style}
-        {...rest}
+        {...(rest as unknown as HTMLTextareaAttributes)}
       ></textarea>
       {#if code}
         <pre><code
-          contenteditable="true"
-          spellcheck="false"
-          bind:innerHTML={codevalue}
-          oninput={e => (codevalue = (e.target as HTMLElement).innerHTML)}
-        >{@html codevalue}</code></pre>
+            contenteditable="true"
+            spellcheck="false"
+            bind:innerHTML={codevalue}
+            oninput={e =>
+              (codevalue = (e.target as HTMLElement).innerHTML)}>{@html codevalue}</code></pre>
       {/if}
     </ConditionalWrapper>
   {:else}

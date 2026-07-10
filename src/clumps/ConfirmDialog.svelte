@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
-  import type { HTMLAttributes } from 'svelte/elements'
+  import type { HTMLDialogAttributes } from 'svelte/elements'
   import Dialog from '../components/Dialog.svelte'
   import Button from '../components/Button.svelte'
   import Spinner from '../components/Spinner.svelte'
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLDialogAttributes {
     open?: boolean
     title?: string
     description?: string | undefined
@@ -61,7 +61,7 @@
     <div class="confirm-actions">
       <Button
         type="button"
-        minimal
+        variant="minimal"
         disabled={loading}
         onclick={handleCancel}
       >

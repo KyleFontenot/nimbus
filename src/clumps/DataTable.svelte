@@ -11,7 +11,7 @@
     sortable?: boolean
   }
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
     data: any[]
     columns: Column[]
     searchable?: boolean

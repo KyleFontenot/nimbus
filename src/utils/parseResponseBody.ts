@@ -1,9 +1,9 @@
 export default async function parseBody(request: Request) {
-	const contentType = request.headers.get("Content-Type");
+	const contentType: string | null = request.headers.get("Content-Type");
 	// console.log(contentType)
 	if (
-		contentType !== "application/json" ||
-		contentType !== "multipart/form-data"
+		(contentType as string) !== "application/json" ||
+		(contentType as string) !== "multipart/form-data"
 	) {
 		return;
 	}

@@ -63,8 +63,9 @@
 
 {#if content}
   {#if asComponent}
-    <svelte:component this={content} {...componentProps} />
+    {@const Comp = content as Component}
+    <Comp {...componentProps} />
   {:else}
-    {@render content()}
+    {@render (content as Snippet)()}
   {/if}
 {/if}

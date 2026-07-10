@@ -1,7 +1,7 @@
-const debounce = (func, delay = 1000) => {
+const debounce = <T extends (...args: any[]) => any>(func: T, delay = 1000) => {
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
-  return function (...args) {
-    const context = this as unknown as ThisType<unknown>;
+  return function (this: unknown, ...args: Parameters<T>) {
+    const context = this;
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => func.apply(context, args), delay);
   };

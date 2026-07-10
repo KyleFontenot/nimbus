@@ -3,6 +3,9 @@
 
   interface Props extends HTMLInputAttributes {
     value?: number
+    min?: number
+    max?: number
+    step?: number
     label?: string | null
     showValue?: boolean
   }

@@ -8,7 +8,7 @@
     href?: string
   }
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLAttributes<HTMLElement> {
     title: string
     subtitle?: string | undefined
     breadcrumbs?: BreadcrumbItem[] | undefined

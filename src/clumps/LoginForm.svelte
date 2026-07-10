@@ -8,7 +8,7 @@
 
   interface Props extends HTMLAttributes<HTMLDivElement> {
     action?: string
-    method?: string
+    method?: 'get' | 'post' | 'dialog' | 'GET' | 'POST' | 'DIALOG'
     title?: string
     subtitle?: string | undefined
     showRememberMe?: boolean

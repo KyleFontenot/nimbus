@@ -2,7 +2,7 @@
   import type { Snippet } from 'svelte'
   import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLAttributes<HTMLElement> {
     maxWidth?: string
     padding?: string | null
     centered?: boolean

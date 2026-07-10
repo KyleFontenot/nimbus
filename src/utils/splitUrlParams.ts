@@ -6,7 +6,7 @@ export default function getUrlComponents(url: string | URL) {
 
 	// Initialize arrays and object for results
 	const pathNames: Array<string> = [];
-	const queryParams = {};
+	const queryParams: Record<string, string> = {};
 
 	// Match all path segments
 	const pathMatches = [..._url.matchAll(regex)];

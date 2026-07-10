@@ -8,7 +8,7 @@
     answer: string
   }
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLAttributes<HTMLElement> {
     items?: FaqItem[]
     title?: string | undefined
     columns?: 1 | 2

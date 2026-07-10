@@ -4,6 +4,7 @@
   interface Props extends HTMLFieldsetAttributes {
     options?: Array<{ value: string; label?: string; disabled?: boolean }>
     value?: string
+    required?: boolean
     direction?: 'row' | 'column'
     children?: import('svelte').Snippet
   }

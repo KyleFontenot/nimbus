@@ -2,6 +2,8 @@
   import type { HTMLProgressAttributes } from 'svelte/elements'
 
   interface Props extends HTMLProgressAttributes {
+    value?: number | null
+    max?: number
     label?: string | null
     size?: 'small' | 'medium' | 'large'
   }
@@ -15,7 +17,9 @@
     ...rest
   }: Props = $props()
 
-  let percent = $derived(value != null ? Math.min(100, Math.max(0, (value / max) * 100)) : null)
+  let percent = $derived(
+    value != null && max != null ? Math.min(100, Math.max(0, (value / max) * 100)) : null
+  )
 </script>
 
 {#if label}

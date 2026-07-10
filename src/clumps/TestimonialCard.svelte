@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { HTMLAttributes } from 'svelte/elements'
+  import type { HTMLBlockquoteAttributes } from 'svelte/elements'
   import Avatar from '../components/Avatar.svelte'
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLBlockquoteAttributes {
     quote: string
     author: string
     role?: string | undefined

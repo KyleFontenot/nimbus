@@ -18,13 +18,14 @@
     required = false,
     value = 'on',
     form = undefined,
+    class: className = '',
     style = undefined,
     children,
     ...rest
   }: Props = $props()
 </script>
 
-<label class="toggle-label {rest.class || ''}" class:disabled {style} {...rest}>
+<label class="toggle-label {className}" class:disabled {style}>
   {#if name}
     <input type="hidden" {name} value={checked ? value : ''} {form} />
   {/if}
@@ -37,6 +38,7 @@
     {disabled}
     {required}
     {value}
+    {...rest}
   />
   <span class="toggle-track">
     <span class="toggle-thumb"></span>

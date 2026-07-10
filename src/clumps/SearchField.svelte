@@ -56,7 +56,6 @@
 >
   <form
     class="search-field-form"
-    {form}
     onsubmit={handleSubmit}
     role="search"
   >
@@ -73,6 +72,7 @@
         {placeholder}
         {name}
         {id}
+        {form}
         onkeydown={handleKeydown}
         aria-label={placeholder}
       />

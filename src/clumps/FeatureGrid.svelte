@@ -8,7 +8,7 @@
     icon?: Snippet
   }
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLAttributes<HTMLElement> {
     features?: Feature[]
     columns?: number
     centered?: boolean

@@ -7,7 +7,7 @@
     label: string
   }
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLAttributes<HTMLElement> {
     stats?: Stat[]
     children?: Snippet
   }

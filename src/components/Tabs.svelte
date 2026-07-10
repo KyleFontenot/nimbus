@@ -7,7 +7,7 @@
 
   import type { HTMLAttributes } from 'svelte/elements'
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
     tabs: Tab[]
     active?: string
     children?: import('svelte').Snippet<[string]>

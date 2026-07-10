@@ -3,7 +3,7 @@
   import type { HTMLAttributes } from 'svelte/elements'
   import Button from '../components/Button.svelte'
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLAttributes<HTMLElement> {
     title: string
     subtitle?: string | undefined
     ctaLabel?: string | undefined
@@ -51,21 +51,12 @@
       {#if ctaLabel || secondaryLabel}
         <div class="hero-actions">
           {#if ctaLabel}
-            <Button
-              type={ctaHref ? 'link' : 'button'}
-              href={ctaHref}
-              color="primary"
-            >
+            <Button href={ctaHref} color="primary">
               {ctaLabel}
             </Button>
           {/if}
           {#if secondaryLabel}
-            <Button
-              type={secondaryHref ? 'link' : 'button'}
-              href={secondaryHref}
-              color="primary"
-              outlined
-            >
+            <Button href={secondaryHref} color="primary" variant="outlined">
               {secondaryLabel}
             </Button>
           {/if}

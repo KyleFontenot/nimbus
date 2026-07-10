@@ -1,8 +1,8 @@
 
-export const deepMerge = (target: Object, source: Object) => {
+export const deepMerge = (target: Record<string, any>, source: Record<string, any>): Record<string, any> => {
   if (!target || !source)
     return target ?? source ?? {};
-  const result = { ...target };
+  const result: Record<string, any> = { ...target };
   for (const [key, value] of Object.entries(source)) {
     const targetValue = target[key];
     if (targetValue instanceof Date || typeof targetValue === 'function') {
@@ -23,7 +23,7 @@ export const deepMerge = (target: Object, source: Object) => {
   }
   return result;
 };
-const isObject = (obj: Object) => obj !== null && typeof obj === 'object' && !Array.isArray(obj);
-const isArray = (obj: Object) => Array.isArray(obj);
+const isObject = (obj: unknown) => obj !== null && typeof obj === 'object' && !Array.isArray(obj);
+const isArray = (obj: unknown) => Array.isArray(obj);
 
 export default deepMerge

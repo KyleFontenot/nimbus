@@ -81,13 +81,13 @@
 
   <div class="pricing-action">
     {#if buttonHref}
-      <Button type="link" href={buttonHref} color={highlighted ? 'primary' : 'white'} fullWidth>
+      <Button href={buttonHref} color={highlighted ? 'primary' : 'white'} fullWidth>
         {buttonLabel}
       </Button>
     {:else}
       <Button
         color={highlighted ? 'primary' : 'white'}
-        outlined={!highlighted}
+        variant={highlighted ? 'filled' : 'outlined'}
         fullWidth
         onclick={onselect}
       >

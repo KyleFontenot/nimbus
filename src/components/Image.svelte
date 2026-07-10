@@ -2,7 +2,7 @@
   import type { Snippet } from 'svelte'
   import type { HTMLImgAttributes } from 'svelte/elements'
 
-  interface Props extends HTMLImgAttributes {
+  interface Props extends Omit<HTMLImgAttributes, 'placeholder'> {
     aspectRatio?: string | undefined
     objectFit?: 'cover' | 'contain' | 'fill' | 'none'
     placeholder?: Snippet

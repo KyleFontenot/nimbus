@@ -1,6 +1,10 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
-  import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements'
+  import type {
+    HTMLButtonAttributes,
+    HTMLAnchorAttributes,
+    HTMLInputAttributes,
+  } from 'svelte/elements'
 
   // When `href` is set the component renders as <a>.
   // When `upload` is true it renders as <input type="file">.
@@ -49,7 +53,7 @@
     data-color={color}
     aria-disabled={disabled || undefined}
     {style}
-    {...rest}
+    {...(rest as unknown as HTMLAnchorAttributes)}
   >
     {@render children?.()}
   </a>
@@ -64,7 +68,7 @@
     {disabled}
     {style}
     {value}
-    {...rest}
+    {...(rest as unknown as HTMLInputAttributes)}
   />
 {:else}
   <button

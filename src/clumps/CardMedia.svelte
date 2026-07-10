@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
-  import type { HTMLAttributes } from 'svelte/elements'
+  import type { HTMLAnchorAttributes } from 'svelte/elements'
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLAnchorAttributes {
     src: string
     alt: string
     title: string
@@ -60,7 +60,7 @@
     class="card-media {rest.class || ''}"
     class:horizontal
     {style}
-    {...rest}
+    {...(rest as unknown as import('svelte/elements').HTMLAttributes<HTMLDivElement>)}
   >
     <div class="card-media-image">
       <img {src} {alt} loading="lazy" />

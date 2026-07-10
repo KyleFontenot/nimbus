@@ -3,7 +3,7 @@
   import type { HTMLAttributes } from 'svelte/elements'
   import Button from '../components/Button.svelte'
 
-  interface Props extends HTMLAttributes<HTMLDivElement> {
+  interface Props extends HTMLAttributes<HTMLElement> {
     title: string
     description?: string | undefined
     buttonLabel: string
@@ -47,7 +47,6 @@
     </div>
     <div class="cta-banner-action">
       <Button
-        type={buttonHref ? 'link' : 'button'}
         href={buttonHref}
         color={variant === 'accent' || variant === 'dark' ? 'white' : 'primary'}
         {onclick}
