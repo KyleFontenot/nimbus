@@ -42,6 +42,11 @@
 		"lint": "biome check .",
 		"format": "biome format .",
 		"check": "biome check .",
+		"check:types": "npm --prefix example run check",
+		"example:install": "npm --prefix example install",
+		"example": "npm --prefix example run dev",
+		"example:build": "npm --prefix example run build",
+		"example:preview": "npm --prefix example run build && npm --prefix example run preview",
 		"prepublishOnly": "npm run build"
 	},
 	"homepage": "https://github.com/KyleFontenot/nimbus#readme",
