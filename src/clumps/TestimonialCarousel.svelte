@@ -120,6 +120,7 @@
     gap: var(--size-5, 1.5rem);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     padding: var(--size-2, 0.5rem) var(--size-5, 1.5rem);
