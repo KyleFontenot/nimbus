@@ -14,8 +14,9 @@ import BottomNav from "./components/BottomNav.svelte";
 import Breadcrumb from "./components/Breadcrumb.svelte";
 import Button from "./components/Button.svelte";
 import Card from "./components/Card.svelte";
-import ClickOutside from "./components/ClickOutside.svelte";
-import ConditionalWrapper from "./components/ConditionalWrapper.svelte";
+import ClickOutside from "./components/util/ClickOutside.svelte";
+import ConditionalWrapper from "./components/util/ConditionalWrapper.svelte";
+import InfiniteScroller from "./components/util/InfiniteScroller.svelte";
 import DateInput from "./components/DateInput.svelte";
 import Details from "./components/Details.svelte";
 import Dialog from "./components/Dialog.svelte";
@@ -62,6 +63,7 @@ const Nimbus: Record<string, Component<any>> = {
   Card,
   ClickOutside,
   ConditionalWrapper,
+  InfiniteScroller,
   DateInput,
   Details,
   Dialog,

@@ -3,7 +3,7 @@
   import type {
     HTMLButtonAttributes,
     HTMLAnchorAttributes,
-    HTMLInputAttributes,
+    HTMLInputAttributes
   } from 'svelte/elements'
 
   // When `href` is set the component renders as <a>.
@@ -53,7 +53,7 @@
     data-color={color}
     aria-disabled={disabled || undefined}
     {style}
-    {...(rest as unknown as HTMLAnchorAttributes)}
+    {...rest as unknown as HTMLAnchorAttributes}
   >
     {@render children?.()}
   </a>
@@ -68,7 +68,7 @@
     {disabled}
     {style}
     {value}
-    {...(rest as unknown as HTMLInputAttributes)}
+    {...rest as unknown as HTMLInputAttributes}
   />
 {:else}
   <button
@@ -112,8 +112,14 @@
     transition: transform var(--transition, 150ms ease);
   }
 
-  .button[data-color='secondary'] { --_color: var(--color, var(--surface-3)); color: var(--text-1); }
-  .button[data-color='white']     { --_color: var(--color, var(--surface-1)); color: var(--text-1); }
+  .button[data-color='secondary'] {
+    --_color: var(--color, var(--surface-3));
+    color: var(--text-1);
+  }
+  .button[data-color='white'] {
+    --_color: var(--color, var(--surface-1));
+    color: var(--text-1);
+  }
 
   .button:hover,
   .button:focus-visible {

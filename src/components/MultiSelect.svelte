@@ -1,6 +1,6 @@
 <script lang="ts">
   import { writable, type Writable } from 'svelte/store'
-  import ClickOutside from './ClickOutside.svelte'
+  import ClickOutside from './util/ClickOutside.svelte'
   import { fade } from 'svelte/transition'
 
   interface Props {

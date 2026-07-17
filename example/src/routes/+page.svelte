@@ -6,7 +6,7 @@
   import Breadcrumb from '../../../src/components/Breadcrumb.svelte'
   import Button from '../../../src/components/Button.svelte'
   import Card from '../../../src/components/Card.svelte'
-  import ClickOutside from '../../../src/components/ClickOutside.svelte'
+  import ClickOutside from '../../../src/components/util/ClickOutside.svelte'
   import DateInput from '../../../src/components/DateInput.svelte'
   import Details from '../../../src/components/Details.svelte'
   import Dialog from '../../../src/components/Dialog.svelte'

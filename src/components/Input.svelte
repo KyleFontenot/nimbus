@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import ConditionalWrapper from './ConditionalWrapper.svelte'
+  import ConditionalWrapper from './util/ConditionalWrapper.svelte'
   import 'highlight.js/styles/github.css'
   import type { HLJSApi } from 'highlight.js'
   import type { HTMLInputAttributes, HTMLTextareaAttributes } from 'svelte/elements'
