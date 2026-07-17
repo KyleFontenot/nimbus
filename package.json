@@ -1,6 +1,6 @@
 {
 	"name": "@kfont/nimbus",
-	"version": "0.6.4",
+	"version": "0.6.5",
 	"description": "A vanilla CSS Svelte 5 Component library",
 	"type": "module",
 	"license": "GNU GPLv3",
