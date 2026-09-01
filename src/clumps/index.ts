@@ -9,6 +9,15 @@ export { default as UserBlock } from './UserBlock.svelte'
 export { default as SearchField } from './SearchField.svelte'
 export { default as ConfirmDialog } from './ConfirmDialog.svelte'
 export { default as DataTable } from './DataTable.svelte'
+export { default as EnhancedTable, EnhancedTableStore } from './EnhancedTable.svelte'
+export type {
+  ColumnType,
+  EnhancedColumn,
+  SortDirection,
+  Comparator,
+  MutableStringSet,
+  EnhancedTableOptions,
+} from './EnhancedTable.svelte'
 export { default as PageHeader } from './PageHeader.svelte'
 export { default as LoginForm } from './LoginForm.svelte'
 export { default as MediaObject } from './MediaObject.svelte'

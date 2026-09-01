@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { HTMLProgressAttributes } from 'svelte/elements'
 
+  let uid = 0
+
   interface Props extends HTMLProgressAttributes {
     value?: number | null
     max?: number
@@ -17,13 +19,15 @@
     ...rest
   }: Props = $props()
 
+  const progressId = `progress-${uid++}`
+
   let percent = $derived(
     value != null && max != null ? Math.min(100, Math.max(0, (value / max) * 100)) : null
   )
 </script>
 
 {#if label}
-  <label class="progress-label">
+  <label class="progress-label" for={progressId}>
     <span class="progress-label-text">{label}</span>
     {#if percent != null}
       <span class="progress-label-value">{Math.round(percent)}%</span>
@@ -31,11 +35,12 @@
   </label>
 {/if}
 <progress
+  id={progressId}
   class="progress {size} {rest.class || ''}"
   {value}
   {max}
   {style}
-  aria-label={label}
+  aria-label={label ? undefined : 'Progress'}
   {...rest}
 >{percent != null ? `${Math.round(percent)}%` : ''}</progress>
 

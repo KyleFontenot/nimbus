@@ -20,21 +20,53 @@
     children,
     ...rest
   }: Props = $props()
+
+  let tabButtons: (HTMLButtonElement | undefined)[] = $state([])
+
+  function handleTabsKeydown(e: KeyboardEvent, currentIndex: number) {
+    let nextIndex: number
+
+    if (e.key === 'ArrowRight') {
+      nextIndex = currentIndex
+      do {
+        nextIndex = (nextIndex + 1) % tabs.length
+      } while (tabs[nextIndex]?.disabled && nextIndex !== currentIndex)
+    } else if (e.key === 'ArrowLeft') {
+      nextIndex = currentIndex
+      do {
+        nextIndex = (nextIndex - 1 + tabs.length) % tabs.length
+      } while (tabs[nextIndex]?.disabled && nextIndex !== currentIndex)
+    } else if (e.key === 'Home') {
+      nextIndex = tabs.findIndex(t => !t.disabled)
+    } else if (e.key === 'End') {
+      nextIndex = tabs.length - 1 - [...tabs].reverse().findIndex(t => !t.disabled)
+    } else {
+      return
+    }
+
+    if (nextIndex < 0 || tabs[nextIndex]?.disabled) return
+    e.preventDefault()
+    active = tabs[nextIndex].id
+    tabButtons[nextIndex]?.focus()
+  }
 </script>
 
 <div class="tabs-wrapper {rest.class || ''}" {style} {...rest}>
   <div class="tabs-list" role="tablist">
-    {#each tabs as tab}
+    {#each tabs as tab, i}
       <button
+        bind:this={tabButtons[i]}
         class="tabs-trigger"
         class:active={active === tab.id}
         role="tab"
         type="button"
         id="tab-{tab.id}"
+        tabindex={active === tab.id ? 0 : -1}
         aria-selected={active === tab.id}
         aria-controls="tabpanel-{tab.id}"
         disabled={tab.disabled}
         onclick={() => (active = tab.id)}
+        onkeydown={e => handleTabsKeydown(e, i)}
       >
         {tab.label}
       </button>

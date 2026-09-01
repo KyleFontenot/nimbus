@@ -82,6 +82,8 @@
     out:fly={{ y: -20, duration: 200 }}
     onmouseenter={handleMouseEnter}
     onmouseleave={handleMouseLeave}
+    onfocusin={handleMouseEnter}
+    onfocusout={handleMouseLeave}
     {...rest}
   >
     <span class="toast-message">{toastState.message}</span>

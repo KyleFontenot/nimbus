@@ -28,6 +28,7 @@
   class:active
   class:pos-left={position === 'left'}
   class:pos-right={position === 'right'}
+  aria-current={active ? 'step' : undefined}
   {style}
   {...rest}
 >

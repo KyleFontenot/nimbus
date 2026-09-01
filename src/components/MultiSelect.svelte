@@ -3,6 +3,8 @@
   import ClickOutside from './util/ClickOutside.svelte'
   import { fade } from 'svelte/transition'
 
+  let uid = 0
+
   interface Props {
     style?: string | null
     clearbutton?: boolean
@@ -21,15 +23,56 @@
     disabled = false
   }: Props = $props()
 
+  const listboxId = `multiselect-options-${uid++}`
+
   const value = writable('')
   const consideredOptions: Writable<any[]> = writable([])
   const showOptions: Writable<boolean> = writable(false)
+
+  let activeIndex = $state(-1)
+
+  const navigableOptions = $derived([
+    ...($value !== '' ? [{ kind: 'add' as const, id: `${listboxId}-add` }] : []),
+    ...$consideredOptions.map((option, i) => ({ kind: 'option' as const, id: `${listboxId}-${i}`, option }))
+  ])
+
+  const activeDescendant = $derived(
+    $showOptions && activeIndex >= 0 ? navigableOptions[activeIndex]?.id : undefined
+  )
 
   $effect(() => {
     if ($value === '') {
       showOptions.set(false)
     }
+    activeIndex = -1
   })
+
+  function activateItem(index: number) {
+    const item = navigableOptions[index]
+    if (!item) return
+    if (item.kind === 'add') {
+      addNewTag($value)
+    } else {
+      selectConsideration(item.option)
+    }
+  }
+
+  function handleInputKeydown(e: KeyboardEvent) {
+    if (!$showOptions || navigableOptions.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      activeIndex = activeIndex < navigableOptions.length - 1 ? activeIndex + 1 : 0
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      activeIndex = activeIndex > 0 ? activeIndex - 1 : navigableOptions.length - 1
+    } else if (e.key === 'Enter' && activeIndex >= 0) {
+      e.preventDefault()
+      activateItem(activeIndex)
+    } else if (e.key === 'Escape') {
+      showOptions.set(false)
+      activeIndex = -1
+    }
+  }
 
   function setFilteredConsiderations(input: string) {
     const filter = possibleValues?.filter(each =>
@@ -91,12 +134,14 @@
           value.set((e.target as HTMLInputElement).value)
           setFilteredConsiderations((e.target as HTMLInputElement).value)
         }}
+        onkeydown={handleInputKeydown}
         {style}
         role="combobox"
         aria-expanded={$showOptions}
-        aria-controls="multiselect-options"
+        aria-haspopup="listbox"
+        aria-controls={listboxId}
         aria-autocomplete="list"
-        aria-multiselectable="true"
+        aria-activedescendant={activeDescendant}
       />
       {#if clearbutton && $value}
         <button
@@ -115,41 +160,36 @@
       <div
         class="options-list"
         class:show={$showOptions}
-        id="multiselect-options"
+        id={listboxId}
         role="listbox"
         aria-multiselectable="true"
       >
-        <ul>
+        <ul role="presentation">
           {#if $value !== ''}
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
             <li
+              id={navigableOptions[0]?.id}
               class="option"
+              class:active={activeIndex === 0}
               role="option"
-              tabindex="0"
               aria-selected="false"
               onclick={() => addNewTag($value)}
-              onkeydown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault()
-                  addNewTag($value)
-                }
-              }}
+              onmouseenter={() => (activeIndex = 0)}
             >
               Add new tag: "{$value}"
             </li>
           {/if}
-          {#each $consideredOptions as option}
+          {#each $consideredOptions as option, i}
+            {@const navIndex = $value !== '' ? i + 1 : i}
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
             <li
+              id={navigableOptions[navIndex]?.id}
               class="option"
+              class:active={activeIndex === navIndex}
               role="option"
-              tabindex="0"
               aria-selected={$selectedValues.some(s => s.id === option.id)}
               onclick={() => selectConsideration(option)}
-              onkeydown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault()
-                  selectConsideration(option)
-                }
-              }}
+              onmouseenter={() => (activeIndex = navIndex)}
             >
               {option.name}
             </li>
@@ -306,9 +346,8 @@
   }
 
   .option:hover,
-  .option:focus {
+  .option.active {
     background-color: var(--primary-9, #e8f3f9);
-    outline: none;
   }
 
   .option[aria-selected='true'] {

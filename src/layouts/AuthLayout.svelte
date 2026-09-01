@@ -33,9 +33,9 @@
       </div>
     {/if}
 
-    <div class="auth-content">
+    <main class="auth-content">
       {@render children?.()}
-    </div>
+    </main>
 
     {#if footer}
       <div class="auth-footer">

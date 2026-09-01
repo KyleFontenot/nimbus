@@ -16,6 +16,7 @@
   import Flex from '../../../src/components/Flex.svelte'
   import Form from '../../../src/components/Form.svelte'
   import Grid from '../../../src/components/Grid.svelte'
+  import Icon from '../../../src/components/Icon.svelte'
   import Image from '../../../src/components/Image.svelte'
   import Input from '../../../src/components/Input.svelte'
   import InputStringArray from '../../../src/components/InputStringArray.svelte'
@@ -46,6 +47,7 @@
   import CtaBanner from '../../../src/clumps/CtaBanner.svelte'
   import DataTable from '../../../src/clumps/DataTable.svelte'
   import EmptyState from '../../../src/clumps/EmptyState.svelte'
+  import EnhancedTable from '../../../src/clumps/EnhancedTable.svelte'
   import FaqSection from '../../../src/clumps/FaqSection.svelte'
   import FeatureGrid from '../../../src/clumps/FeatureGrid.svelte'
   import FormField from '../../../src/clumps/FormField.svelte'
@@ -116,6 +118,15 @@
     { key: 'category', label: 'Category', sortable: true },
     { key: 'price', label: 'Price', sortable: true },
     { key: 'stock', label: 'Stock', sortable: true },
+  ]
+
+  const enhancedTableRows = [
+    { name: 'Widget A', category: 'Hardware', price: 29.99, inStock: true, updated: new Date('2026-06-01') },
+    { name: 'Widget B', category: 'Software', price: 9.99, inStock: true, updated: new Date('2026-08-14') },
+    { name: 'Gadget C', category: 'Hardware', price: 49.5, inStock: false, updated: new Date('2026-03-22') },
+    { name: 'Service D', category: 'Service', price: 99.0, inStock: false, updated: new Date('2026-07-09') },
+    { name: 'Tool E', category: 'Software', price: 19.99, inStock: true, updated: new Date('2026-01-30') },
+    { name: 'Part F', category: 'Hardware', price: 5.75, inStock: true, updated: new Date('2026-05-18') },
   ]
 
   function demoSearchFn(query: string) {
@@ -287,6 +298,32 @@
       <h2 class="section-title">Display</h2>
 
       <div class="demo-block">
+        <h3>Icon</h3>
+        <Flex gap="1rem" justify="flex-start" align="center" wrap>
+          <Icon name="star" />
+          <Icon name="heart" color="var(--error)" />
+          <Icon name="circle-check" />
+          <Icon name="settings" size="1.5rem" />
+          <Icon name="calendar" size="1.5rem" />
+          <Icon name="bell" size="1.5rem" strokeWidth={1.5} />
+        </Flex>
+
+        <p style="margin: 1rem 0 0.5rem;">Inside a Button (sizes with the button's font-size via <code>1em</code>):</p>
+        <Flex gap="0.5rem" justify="flex-start" align="center" wrap>
+          <Button><Icon name="download" /> Download</Button>
+          <Button color="secondary"><Icon name="send" /> Send</Button>
+          <Button variant="outlined"><Icon name="check" /> Confirm</Button>
+          <Button variant="minimal" aria-label="Settings"><Icon name="settings" label="Settings" /></Button>
+        </Flex>
+
+        <p style="margin: 1rem 0 0.5rem;">Inside a Badge:</p>
+        <Flex gap="0.5rem" justify="flex-start" align="center">
+          <Badge variant="success"><Icon name="circle-check" size="1em" /> Verified</Badge>
+          <Badge variant="warning"><Icon name="triangle-alert" size="1em" /> Pending review</Badge>
+        </Flex>
+      </div>
+
+      <div class="demo-block">
         <h3>Badge</h3>
         <Flex gap="0.5rem" justify="flex-start">
           <Badge>Default</Badge>
@@ -304,6 +341,7 @@
           <Tag label="React" variant="default" />
           <Tag label="Removable" variant="success" removable onremove={() => {}} />
           <Tag label="Link tag" variant="warning" href="#display" />
+          <Tag label="Link + removable" variant="primary" href="#display" removable onremove={() => {}} />
         </Flex>
       </div>
 
@@ -678,6 +716,27 @@
           searchKeys={['name', 'category']}
           pageSize={4}
         />
+      </div>
+
+      <div class="demo-block">
+        <h3>EnhancedTable</h3>
+        <EnhancedTable
+          data={enhancedTableRows}
+          hideableColumns
+          columnLabels={{ inStock: 'In stock', updated: 'Last updated' }}
+        >
+          {#snippet cell(col, value, row)}
+            {#if col.key === 'inStock'}
+              <td>{value ? 'Yes' : 'No'}</td>
+            {:else if col.key === 'updated'}
+              <td>{(value as Date).toLocaleDateString()}</td>
+            {:else if col.key === 'price'}
+              <td>${(value as number).toFixed(2)}</td>
+            {:else}
+              <td>{value}</td>
+            {/if}
+          {/snippet}
+        </EnhancedTable>
       </div>
 
       <div class="demo-block">

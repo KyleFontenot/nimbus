@@ -28,7 +28,9 @@
   }: Props = $props()
 </script>
 
-<div class="table-wrapper" class:drag-scroll={dragScroll}>
+<!-- tabindex lets keyboard users scroll a table that overflows horizontally (WAI-ARIA "scrollable region" technique, WCAG SCR29) -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+<div class="table-wrapper" class:drag-scroll={dragScroll} tabindex="0">
   <table
     class="table {rest.class || ''}"
     class:grid

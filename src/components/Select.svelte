@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { HTMLSelectAttributes } from 'svelte/elements'
 
+  let uid = 0
+
   interface Props extends HTMLSelectAttributes {
     label?: string | null
     options?: Array<{ value: string; text?: string; disabled?: boolean }> | null
@@ -26,6 +28,9 @@
     children,
     ...rest
   }: Props = $props()
+
+  const generatedId = `select-${uid++}`
+  const selectId = $derived(id ?? generatedId)
 </script>
 
 {#snippet selectOptions()}
@@ -41,7 +46,7 @@
 {/snippet}
 
 {#if label}
-  <label class="select-label" for={id}>
+  <label class="select-label" for={selectId}>
     {label}
   </label>
 {/if}
@@ -49,7 +54,7 @@
   <select
     class="select {rest.class || ''}"
     {name}
-    {id}
+    id={selectId}
     {disabled}
     {required}
     multiple
@@ -64,7 +69,7 @@
   <select
     class="select {rest.class || ''}"
     {name}
-    {id}
+    id={selectId}
     {disabled}
     {required}
     {form}

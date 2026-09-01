@@ -5,6 +5,8 @@
   import Button from '../components/Button.svelte'
   import Spinner from '../components/Spinner.svelte'
 
+  let uid = 0
+
   interface Props extends HTMLDialogAttributes {
     open?: boolean
     title?: string
@@ -32,6 +34,8 @@
     ...rest
   }: Props = $props()
 
+  const titleId = `confirm-dialog-title-${uid++}`
+
   function handleConfirm() {
     if (loading) return
     onconfirm()
@@ -44,9 +48,9 @@
   }
 </script>
 
-<Dialog bind:open closeable={!loading} {...rest}>
+<Dialog bind:open closeable={!loading} aria-labelledby={titleId} {...rest}>
   <div class="confirm-dialog" class:danger={variant === 'danger'}>
-    <h2 class="confirm-title">{title}</h2>
+    <h2 class="confirm-title" id={titleId}>{title}</h2>
 
     {#if description}
       <p class="confirm-description">{description}</p>

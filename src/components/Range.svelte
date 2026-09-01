@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from 'svelte/elements'
 
+  let uid = 0
+
   interface Props extends HTMLInputAttributes {
     value?: number
     min?: number
@@ -26,11 +28,14 @@
     ...rest
   }: Props = $props()
 
+  const generatedId = `range-${uid++}`
+  const rangeId = $derived(id ?? generatedId)
+
   let percent = $derived(((value - min) / (max - min)) * 100)
 </script>
 
 {#if label}
-  <label class="range-label" for={id}>
+  <label class="range-label" for={rangeId}>
     <span class="range-label-text">{label}</span>
     {#if showValue}
       <span class="range-label-value">{value}</span>
@@ -45,13 +50,13 @@
   {max}
   {step}
   {name}
-  {id}
+  id={rangeId}
   {disabled}
   {required}
   {form}
   {style}
   style:--range-percent="{percent}%"
-  aria-label={label}
+  aria-label={label ? undefined : 'Range'}
   {...rest}
 />
 

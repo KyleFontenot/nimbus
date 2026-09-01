@@ -36,11 +36,21 @@
 
   function scrollToIndex(index: number) {
     if (!scrollContainer) return
-    const cards = scrollContainer.children
-    if (cards[index]) {
-      cards[index].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
+    const card = scrollContainer.children[index] as HTMLElement | undefined
+    if (card) {
+      const containerRect = scrollContainer.getBoundingClientRect()
+      const cardRect = card.getBoundingClientRect()
+      const targetLeft = scrollContainer.scrollLeft + (cardRect.left - containerRect.left)
+      scrollContainer.scrollTo({ left: targetLeft, behavior: 'smooth' })
     }
     activeIndex = index
+  }
+
+  function handleWheel(event: WheelEvent) {
+    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+      event.preventDefault()
+      window.scrollBy({ top: event.deltaY })
+    }
   }
 
   function handleScroll() {
@@ -66,17 +76,23 @@
   })
 </script>
 
+<!-- pure hover/focus boundary for pausing autoplay (WCAG 2.2.2); the scrollable region below carries the actual role -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
   class="testimonial-carousel {rest.class || ''}"
   {style}
   {...rest}
   onmouseenter={() => (isHovered = true)}
   onmouseleave={() => (isHovered = false)}
+  onfocusin={() => (isHovered = true)}
+  onfocusout={() => (isHovered = false)}
 >
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
   <div
     class="testimonial-carousel-track"
     bind:this={scrollContainer}
     onscroll={handleScroll}
+    onwheel={handleWheel}
     role="region"
     aria-label="Testimonials"
     tabindex="0"
