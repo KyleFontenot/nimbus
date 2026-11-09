@@ -40,7 +40,36 @@
   }
 </script>
 
-{#if href}
+{#if href && removable}
+  <!-- A native <a> cannot contain a native <button> without creating nested
+       interactive elements, which breaks assistive-tech behavior. Use a
+       non-interactive group wrapper with the link and remove button as siblings. -->
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+  <!-- the keydown here is only a Backspace/Delete shortcut; the link and remove button remain independently reachable and operable via Tab/Enter/Space -->
+  <span
+    class="tag {variant} {size} {rest.class || ''}"
+    role="group"
+    {style}
+    onkeydown={handleKeydown}
+    {...rest}
+  >
+    <a {href} class="tag-link">
+      <span class="tag-content">
+        {#if children}
+          {@render children()}
+        {:else}
+          {label}
+        {/if}
+      </span>
+    </a>
+    <button
+      type="button"
+      class="remove-btn"
+      aria-label="Remove {label}"
+      onclick={handleRemove}
+    >×</button>
+  </span>
+{:else if href}
   <a
     {href}
     class="tag {variant} {size} {rest.class || ''}"
@@ -55,14 +84,6 @@
         {label}
       {/if}
     </span>
-    {#if removable}
-      <button
-        type="button"
-        class="remove-btn"
-        aria-label="Remove {label}"
-        onclick={handleRemove}
-      >×</button>
-    {/if}
   </a>
 {:else}
   <span
@@ -118,6 +139,24 @@
   .tag:focus-visible {
     outline: var(--focus-size, 2px) solid var(--accent);
     outline-offset: 1px;
+  }
+
+  .tag-link {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .tag-link:hover {
+    filter: brightness(0.95);
+  }
+
+  .tag-link:focus-visible {
+    outline: var(--focus-size, 2px) solid var(--accent);
+    outline-offset: 1px;
+    border-radius: var(--radius-1, 3px);
   }
 
   /* Sizes */

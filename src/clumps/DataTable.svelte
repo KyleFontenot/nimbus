@@ -115,7 +115,15 @@
     <thead>
       <tr>
         {#each columns as col}
-          <th>
+          <th
+            aria-sort={col.sortable
+              ? sortKey === col.key
+                ? sortDir === 'asc'
+                  ? 'ascending'
+                  : 'descending'
+                : 'none'
+              : undefined}
+          >
             {#if col.sortable}
               <button
                 class="sort-button"
@@ -147,7 +155,7 @@
       {#if paginatedData.length === 0}
         <tr>
           <td colspan={columns.length}>
-            <div class="data-table-empty">No results found.</div>
+            <div class="data-table-empty" role="status">No results found.</div>
           </td>
         </tr>
       {/if}

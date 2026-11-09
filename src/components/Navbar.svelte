@@ -27,6 +27,7 @@
   }: Props = $props()
 
   let mobileOpen = $state(false)
+  let toggleEl: HTMLButtonElement | undefined = $state()
 
   function toggleMenu() {
     mobileOpen = !mobileOpen
@@ -35,6 +36,20 @@
   function closeMenu() {
     mobileOpen = false
   }
+
+  $effect(() => {
+    if (!mobileOpen) return
+
+    function handleKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        mobileOpen = false
+        toggleEl?.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeydown)
+    return () => document.removeEventListener('keydown', handleKeydown)
+  })
 </script>
 
 <nav
@@ -57,6 +72,7 @@
     {/if}
 
     <button
+      bind:this={toggleEl}
       class="navbar-toggle"
       type="button"
       aria-expanded={mobileOpen}

@@ -41,6 +41,8 @@
   }
 </script>
 
+<!-- native <dialog>.showModal() already provides focus trapping, Escape-to-close and role="dialog"/aria-modal; onclick here only detects clicks on the ::backdrop (the standard technique, since e.target === dialogEl exactly when the click misses the rendered content) -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <dialog
   bind:this={dialogEl}
   class="dialog {rest.class || ''}"

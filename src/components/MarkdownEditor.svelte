@@ -641,6 +641,11 @@
     color: var(--gray-400, #aaa);
   }
 
+  .md-textarea:focus-visible {
+    outline: var(--focus-size, 2px) solid var(--accent);
+    outline-offset: -1px;
+  }
+
   /* Preview */
   .md-preview-pane {
     flex: 1;

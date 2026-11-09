@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { HTMLAttributes } from 'svelte/elements'
 
+  let uid = 0
+
   interface Props extends HTMLAttributes<HTMLDivElement> {
     value?: string[]
     name?: string | null
@@ -22,6 +24,8 @@
     style = undefined,
     ...rest
   }: Props = $props()
+
+  const inputId = `string-array-input-${uid++}`
 
   let inputValue = $state('')
   let inputEl: HTMLInputElement | undefined = $state()
@@ -61,8 +65,10 @@
 </script>
 
 {#if label}
-  <label class="string-array-label">{label}</label>
+  <label class="string-array-label" for={inputId}>{label}</label>
 {/if}
+<!-- clicking anywhere in the tag area focuses the text input, which remains independently reachable via Tab -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <div
   class="string-array {rest.class || ''}"
   class:disabled
@@ -88,6 +94,7 @@
   <input
     bind:this={inputEl}
     bind:value={inputValue}
+    id={inputId}
     class="string-array-input"
     {placeholder}
     {disabled}

@@ -2,6 +2,8 @@
   import type { Snippet } from 'svelte'
   import type { HTMLAttributes } from 'svelte/elements'
 
+  let uid = 0
+
   interface Props extends HTMLAttributes<HTMLDivElement> {
     value?: string
     placeholder?: string
@@ -30,14 +32,23 @@
     ...rest
   }: Props = $props()
 
+  const listboxId = `search-results-${uid++}`
+
   let results: unknown[] = $state([])
   let showResults = $state(false)
   let loading = $state(false)
+  let activeIndex = $state(-1)
   let debounceTimer: ReturnType<typeof setTimeout> | undefined = $state()
   let wrapperEl: HTMLDivElement | undefined = $state()
 
+  let activeDescendant = $derived(
+    showResults && activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined
+  )
+
   function handleInput() {
     clearTimeout(debounceTimer)
+
+    activeIndex = -1
 
     if (!value.trim()) {
       results = []
@@ -65,11 +76,22 @@
   function handleResultClick(result: unknown) {
     onResultClick?.(result)
     showResults = false
+    activeIndex = -1
   }
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       showResults = false
+      activeIndex = -1
+    } else if (e.key === 'ArrowDown' && showResults && results.length > 0) {
+      e.preventDefault()
+      activeIndex = activeIndex < results.length - 1 ? activeIndex + 1 : 0
+    } else if (e.key === 'ArrowUp' && showResults && results.length > 0) {
+      e.preventDefault()
+      activeIndex = activeIndex > 0 ? activeIndex - 1 : results.length - 1
+    } else if (e.key === 'Enter' && activeIndex >= 0 && results[activeIndex] !== undefined) {
+      e.preventDefault()
+      handleResultClick(results[activeIndex])
     }
   }
 
@@ -100,7 +122,12 @@
       onfocus={handleFocus}
       onkeydown={handleKeydown}
       aria-label={placeholder}
-      role="searchbox"
+      role="combobox"
+      aria-expanded={showResults}
+      aria-haspopup="listbox"
+      aria-controls={listboxId}
+      aria-autocomplete="list"
+      aria-activedescendant={activeDescendant}
     />
     {#if loading}
       <span class="search-loading" aria-hidden="true"></span>
@@ -108,14 +135,18 @@
   </div>
 
   {#if showResults && results.length > 0}
-    <div class="search-results" role="listbox">
+    <div class="search-results" id={listboxId} role="listbox">
       {#each results as result, i}
         <button
+          id="{listboxId}-{i}"
           class="search-result"
+          class:active={activeIndex === i}
           type="button"
           role="option"
+          aria-selected={activeIndex === i}
           tabindex="-1"
           onclick={() => handleResultClick(result)}
+          onmouseenter={() => (activeIndex = i)}
         >
           {#if resultSnippet}
             {@render resultSnippet(result)}
@@ -232,7 +263,8 @@
     border-bottom: none;
   }
 
-  .search-result:hover {
+  .search-result:hover,
+  .search-result.active {
     background-color: var(--gray-50, #f9f9f9);
   }
 

@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { HTMLTextareaAttributes } from 'svelte/elements'
 
+  let uid = 0
+
   interface Props extends HTMLTextareaAttributes {
     value?: string
     label?: string | null
@@ -29,6 +31,9 @@
     ...rest
   }: Props = $props()
 
+  const generatedId = `textarea-${uid++}`
+  const textareaId = $derived(id ?? generatedId)
+
   let textareaEl: HTMLTextAreaElement | undefined = $state()
 
   function handleInput() {
@@ -47,7 +52,7 @@
 </script>
 
 {#if label}
-  <label class="textarea-label" for={id}>{label}</label>
+  <label class="textarea-label" for={textareaId}>{label}</label>
 {/if}
 <textarea
   bind:this={textareaEl}
@@ -55,7 +60,7 @@
   class="textarea {rest.class || ''}"
   class:auto-resize={autoResize}
   {name}
-  {id}
+  id={textareaId}
   {placeholder}
   {rows}
   {maxlength}

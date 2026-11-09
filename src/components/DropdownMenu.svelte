@@ -100,9 +100,21 @@
     el?.focus()
   })
 
-  function toggleMenu(e: MouseEvent) {
+  function toggleMenu(e: MouseEvent | KeyboardEvent) {
     e.stopPropagation()
     open = !open
+  }
+
+  function handleTriggerKeydown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      toggleMenu(e)
+    } else if (e.key === 'ArrowDown' && !open) {
+      e.preventDefault()
+      open = true
+    } else if (e.key === 'Escape' && open) {
+      open = false
+    }
   }
 
   function selectItem(item: MenuItem) {
@@ -118,10 +130,10 @@
   {style}
   {...rest}
 >
-  <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div
     class="dropdown-trigger"
     onclick={toggleMenu}
+    onkeydown={handleTriggerKeydown}
     role="button"
     tabindex="0"
     aria-haspopup="menu"

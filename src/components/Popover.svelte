@@ -20,7 +20,17 @@
 
   let wrapperEl: HTMLDivElement | undefined = $state()
   let popoverEl: HTMLDivElement | undefined = $state()
+  let triggerEl: HTMLDivElement | undefined = $state()
   let supportsPopover = $state(false)
+  let hasBeenOpen = false
+
+  $effect(() => {
+    if (open) {
+      hasBeenOpen = true
+    } else if (hasBeenOpen) {
+      triggerEl?.focus()
+    }
+  })
 
   $effect(() => {
     supportsPopover = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype
@@ -62,9 +72,18 @@
     }
   })
 
-  function toggle(e: MouseEvent) {
+  function toggle(e: MouseEvent | KeyboardEvent) {
     e.stopPropagation()
     open = !open
+  }
+
+  function handleTriggerKeydown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      toggle(e)
+    } else if (e.key === 'Escape' && open) {
+      open = false
+    }
   }
 
   function handleNativeToggle(e: Event) {
@@ -79,8 +98,16 @@
   {style}
   {...rest}
 >
-  <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <div class="popover-trigger" onclick={toggle} role="button" tabindex="0" aria-expanded={open}>
+  <div
+    bind:this={triggerEl}
+    class="popover-trigger"
+    onclick={toggle}
+    onkeydown={handleTriggerKeydown}
+    role="button"
+    tabindex="0"
+    aria-expanded={open}
+    aria-haspopup="dialog"
+  >
     {@render trigger?.()}
   </div>
 

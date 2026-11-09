@@ -29,16 +29,18 @@
   {style}
   {...rest}
 >
-  <label class="form-field-label" for={forAttr}>
-    {label}
-    {#if required}
-      <span class="required-indicator" aria-hidden="true">*</span>
-    {/if}
-  </label>
+  <label class="form-field-label-wrap" for={forAttr}>
+    <span class="form-field-label">
+      {label}
+      {#if required}
+        <span class="required-indicator" aria-hidden="true">*</span>
+      {/if}
+    </span>
 
-  <div class="form-field-control">
-    {@render children?.()}
-  </div>
+    <div class="form-field-control">
+      {@render children?.()}
+    </div>
+  </label>
 
   {#if error}
     <p class="form-field-error" role="alert">{error}</p>
@@ -53,6 +55,12 @@
     flex-direction: column;
     gap: var(--size-1, 0.25rem);
     margin-bottom: var(--size-3, 1rem);
+  }
+
+  .form-field-label-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-1, 0.25rem);
   }
 
   .form-field-label {
