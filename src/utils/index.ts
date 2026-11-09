@@ -8,6 +8,13 @@ export { default as httpStatusCodes } from "./httpStatusCodes";
 export { default as isJson } from "./isJson";
 export { default as months } from "./months";
 export * from "./parseResponseBody";
+export { default as persisted, persistedStore } from "./persisted.svelte";
+export type {
+	PersistedOptions,
+	PersistedState,
+	PersistedStore,
+	StorageType,
+} from "./persisted.svelte";
 export { default as splitUrlParams } from "./splitUrlParams";
 export { default as websocketstore } from "./websocketstore";
 export {

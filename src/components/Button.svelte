@@ -17,7 +17,6 @@
     variant?: 'filled' | 'outlined' | 'minimal'
     color?: 'primary' | 'secondary' | 'white'
     fullWidth?: boolean
-    leftArrow?: boolean
     children?: Snippet
   }
 
@@ -29,7 +28,6 @@
     variant = 'filled',
     color = 'primary',
     fullWidth = false,
-    leftArrow = false,
     type = 'button',
     disabled = false,
     class: className = '',
@@ -49,7 +47,6 @@
     class:outlined={variant === 'outlined'}
     class:minimal={variant === 'minimal'}
     class:fullwidth={fullWidth}
-    class:left-arrow={leftArrow}
     data-color={color}
     aria-disabled={disabled || undefined}
     {style}
@@ -77,7 +74,6 @@
     class:outlined={variant === 'outlined'}
     class:minimal={variant === 'minimal'}
     class:fullwidth={fullWidth}
-    class:left-arrow={leftArrow}
     data-color={color}
     {disabled}
     {style}
@@ -154,9 +150,5 @@
   .fullwidth {
     display: flex;
     width: 100%;
-  }
-
-  .left-arrow::before {
-    content: '←';
   }
 </style>
